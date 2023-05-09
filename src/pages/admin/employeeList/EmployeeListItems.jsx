@@ -17,7 +17,7 @@ export default function EmployeeListItems({ checkHandle, users , handleProfileCl
                 onChange={checkHandle}
               />
             </td>
-            <td onClick={handleProfileClick} data-uid={employee.id}>
+            <td className="nameCnt" onClick={handleProfileClick} data-uid={employee.id}>
               <div className="nameContainer">
                 <img src={employee.image} className="userAvatar" />
                 {employee.name}

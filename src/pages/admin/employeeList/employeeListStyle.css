@@ -107,6 +107,10 @@
   height: 100%;
 }
 
+#employeeListTable .nameCnt:hover{
+  cursor: pointer;
+}
+
 .userAvatar {
   width: 45px;
   height: 45px;
@@ -119,6 +123,8 @@
   height: 60px;
   pointer-events: none;
 }
+
+
 .employeeType > div {
   font-size: 12px;
   line-height: 18px;
