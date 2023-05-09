@@ -20,7 +20,7 @@ let employeesList = [
     image: testAvatar,
     name: "Mohamed Ouksili",
     id: "EM193",
-    email: "medouskili@gmail.com",
+    email: "mohamedouksili27asjdgkl@gmail.com",
     type: "Cleaner",
     phone: "0669291946",
   },

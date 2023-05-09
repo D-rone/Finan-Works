@@ -9,32 +9,39 @@ export default function Employee({ data, handleProfileClick }) {
         <button onClick={handleProfileClick} id="quitBtn">
           <img src={quit} alt=""></img>
         </button>
-        <h2>Employee Information</h2>
 
-        <table>
+        <h2>Employee Information</h2>
+        <table id="profileInfoTable">
           <tbody>
             <tr>
               <th>Picture : </th>
               <td>
-                {" "}
-                <img src={data.image} />{" "}
+                <img src={data.image} id="userPic" />{" "}
               </td>
             </tr>
             <tr>
               <th>Name :</th>
-              <td>{data.name}</td>
+              <td>
+                <div className="profileData">{data.name}</div>
+              </td>
             </tr>
             <tr>
               <th>Email : </th>
-              <td>{data.email}</td>
+              <td>
+                <div className="profileData">{data.email}</div>
+              </td>
             </tr>
             <tr>
-              <th>Type</th>
-              <td>{data.type}</td>
+              <th>Type : </th>
+              <td>
+                <div className="profileData">{data.type}</div>
+              </td>
             </tr>
             <tr>
               <th>N° Tel :</th>
-              <td>{data.phone}</td>
+              <td>
+                <div className="profileData">{data.phone}</div>
+              </td>
             </tr>
           </tbody>
         </table>
