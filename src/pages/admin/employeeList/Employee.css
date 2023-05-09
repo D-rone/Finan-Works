@@ -79,3 +79,25 @@
   align-items: center;
   padding: 0 20px;
 }
+
+.userDataInput {
+  background: none;
+  border: none;
+  height: 100%;
+  width: 100%;
+  font-size: 16px;
+}
+
+#imageInput {
+  width: 183px;
+  height: 183px;
+  background: #d9d9d9;
+  border-radius: 10px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#imageInput::-webkit-file-upload-button {
+  visibility: hidden;
+}

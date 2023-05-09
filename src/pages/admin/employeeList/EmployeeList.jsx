@@ -13,7 +13,8 @@ import EmployeeListItems from "./EmployeeListItems";
 import { useState, useEffect } from "react";
 import Employee from "./Employee";
 import TopBar from "../global/TopBar";
-import topG from "../../../assest/topG.PNG"
+import topG from "../../../assest/topG.PNG";
+import AddEmployeeForm from "./AddEmployeeForm";
 
 let employeesList = [
   {
@@ -106,11 +107,6 @@ export default function EmployeeList() {
       return { show: !prevState.show, uid: uid };
     });
   };
-  useEffect(() => {
-    if (showProfile.show) {
-      console.log();
-    }
-  }, [showProfile]);
 
   let DisplayProfile = () => {
     if (showProfile.show && showProfile.uid) {
@@ -121,9 +117,21 @@ export default function EmployeeList() {
     }
   };
 
+  let [addEmployeeForm, setAddEmployeeForm] = useState(false);
+
+  let toggleAddProfileForm = () => {
+    setAddEmployeeForm((prev) => !prev);
+  };
+
+  let DisplayAddProfileForm = () => {
+    if (addEmployeeForm)
+      return <AddEmployeeForm toggle={toggleAddProfileForm} />;
+  };
+
   return (
     <section id="mainSection">
       <DisplayProfile />
+      <DisplayAddProfileForm />
       <TopBar />
       <div id="employeeList">
         <header>
@@ -189,7 +197,7 @@ export default function EmployeeList() {
               <img src={sendMoneyImg} alt="" />
               Send money
             </button>
-            <button id="addEmployee">
+            <button id="addEmployee" onClick={toggleAddProfileForm}>
               <img src={addEmployee} alt="" />
               Add
             </button>
