@@ -19,7 +19,6 @@ export default function AddEmployee({ toggle }) {
       }else{
         fileInput.style.background = `#d9d9d9`
       }
-      console.log(file);
     });
   }, []);
   return (
