@@ -1,0 +1,33 @@
+#shade {
+  width: 100%;
+  background: rgba(34, 34, 34, 0.3);
+  height: 100%;
+  position: absolute;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#profileContainer {
+  margin: 20px;
+  width: 80%;
+  height: 90%;
+  background: white;
+  border-radius: 16px;
+
+  position: relative;
+}
+
+#quitBtn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  position: absolute;
+  top: 33px;
+  right: 42px;
+}
+#quitBtn:hover > img {
+  filter: brightness(0) invert(13%) sepia(100%) saturate(7254%) brightness(98%) contrast(117%);
+}

@@ -1,0 +1,20 @@
+#topbar {
+  width: 79.86%;
+  height: 80px;
+  position: fixed;
+}
+
+#headerSpacer {
+  height: 80px;
+}
+
+#sidebar {
+  width: 20.14%;
+  height: 100vh;
+  position: fixed;
+  z-index: 1000000;
+  pointer-events: none;
+}
+#sidebar > a {
+  position: relative;
+}
