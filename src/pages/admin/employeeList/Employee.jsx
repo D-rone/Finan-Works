@@ -16,7 +16,7 @@ export default function Employee({ data, handleProfileClick }) {
             <tr>
               <th>Picture : </th>
               <td>
-                <img src={data.image} id="userPic" />{" "}
+                <img src={data.image} id="userPic" style={{borderRadius : "10px"}}/>
               </td>
             </tr>
             <tr>

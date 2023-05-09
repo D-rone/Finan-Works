@@ -13,6 +13,7 @@ import EmployeeListItems from "./EmployeeListItems";
 import { useState, useEffect } from "react";
 import Employee from "./Employee";
 import TopBar from "../global/TopBar";
+import topG from "../../../assest/topG.PNG"
 
 let employeesList = [
   {
@@ -26,7 +27,7 @@ let employeesList = [
   },
   {
     isChecked: false,
-    image: testAvatar,
+    image: topG,
     name: "Koussaila Benhammouch",
     id: "EM123",
     email: "k.benhammouch@esi-sba.dz",
@@ -44,7 +45,7 @@ let employeesList = [
   },
   {
     isChecked: false,
-    image: testAvatar,
+    image: topG,
     name: "Tbahriti Mohamed",
     id: "EM892",
     email: "m.tbahriti@esi-sba.dz",
@@ -62,7 +63,7 @@ let employeesList = [
   },
   {
     isChecked: false,
-    image: testAvatar,
+    image: topG,
     name: "Cerra Chraka Adel",
     id: "EM199",
     email: "a.cerra-chraka@gmail.com",
