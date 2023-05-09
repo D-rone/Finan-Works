@@ -4,6 +4,24 @@ import quit from "../../../assest/quitX.svg";
 
 let data = {};
 export default function AddEmployee({ toggle }) {
+  useEffect(() => {
+    const fileInput = document.getElementById("imageInput");
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      let fileReader = new FileReader();
+      if (file) {
+        fileReader.readAsDataURL(file);
+
+        fileReader.onload = function () {
+          fileInput.style.background = `url("${fileReader.result}")`
+          fileInput.style.backgroundSize = "183px 183px"
+        };
+      }else{
+        fileInput.style.background = `#d9d9d9`
+      }
+      console.log(file);
+    });
+  }, []);
   return (
     <div id="shade">
       <div id="profileContainer">
@@ -17,31 +35,43 @@ export default function AddEmployee({ toggle }) {
             <tr>
               <th>Picture : </th>
               <td>
-                <input type="file" accept="image/png, image/jpeg" id="imageInput"/>
+                <input
+                  type="file"
+                  accept="image/png, image/jpeg"
+                  id="imageInput"
+                />
               </td>
             </tr>
             <tr>
               <th>Name :</th>
               <td>
-                <div className="profileData"><input type="text" className="userDataInput" /></div>
+                <div className="profileData">
+                  <input type="text" className="userDataInput" />
+                </div>
               </td>
             </tr>
             <tr>
               <th>Email : </th>
               <td>
-                <div className="profileData"><input type="text" className="userDataInput" /></div>
+                <div className="profileData">
+                  <input type="text" className="userDataInput" />
+                </div>
               </td>
             </tr>
             <tr>
               <th>Type : </th>
               <td>
-                <div className="profileData"><input type="text" className="userDataInput" /></div>
+                <div className="profileData">
+                  <input type="text" className="userDataInput" />
+                </div>
               </td>
             </tr>
             <tr>
               <th>N° Tel :</th>
               <td>
-                <div className="profileData"><input type="text" className="userDataInput" /></div>
+                <div className="profileData">
+                  <input type="text" className="userDataInput" />
+                </div>
               </td>
             </tr>
           </tbody>
