@@ -101,3 +101,10 @@
 #imageInput::-webkit-file-upload-button {
   visibility: hidden;
 }
+
+input:focus{
+  outline:none;
+}
+input::placeholder{
+  color: rgb(203, 203, 203);
+}

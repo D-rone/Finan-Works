@@ -45,7 +45,7 @@ export default function AddEmployee({ toggle }) {
               <th>Name :</th>
               <td>
                 <div className="profileData">
-                  <input type="text" className="userDataInput" />
+                  <input type="text" placeholder="Employee Name" className="userDataInput" />
                 </div>
               </td>
             </tr>
@@ -53,7 +53,7 @@ export default function AddEmployee({ toggle }) {
               <th>Email : </th>
               <td>
                 <div className="profileData">
-                  <input type="text" className="userDataInput" />
+                  <input type="email" placeholder="Employee Email" className="userDataInput"/>
                 </div>
               </td>
             </tr>
@@ -61,7 +61,7 @@ export default function AddEmployee({ toggle }) {
               <th>Type : </th>
               <td>
                 <div className="profileData">
-                  <input type="text" className="userDataInput" />
+                  <input type="text" placeholder="Employee Type" className="userDataInput" />
                 </div>
               </td>
             </tr>
@@ -69,7 +69,7 @@ export default function AddEmployee({ toggle }) {
               <th>N° Tel :</th>
               <td>
                 <div className="profileData">
-                  <input type="text" className="userDataInput" />
+                  <input type="text" placeholder="Employee Phone Number" className="userDataInput" />
                 </div>
               </td>
             </tr>
