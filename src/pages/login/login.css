@@ -1,0 +1,188 @@
+.login {
+  width: 80%;
+  padding-inline: auto;
+  margin-inline: auto;
+  margin-top: 30px;
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login__wrapper {
+  display: flex;
+  border: 1px solid white;
+}
+
+.col_2 {
+  border-radius: 0px 40px 40px 0px;
+  background-image: url("../../assets/BackgroundBlur.svg");
+  width: 780px;
+  padding-left: 76px;
+}
+
+body {
+  /*background-image: url("../../assets/BackgroundBlur.svg");*/
+  background-color: #2b677708;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.hhs {
+  position: absolute;
+  bottom: 17%;
+  color: white;
+  left: 16%;
+  font-size: 30px;
+  font-weight: 500;
+}
+
+.hhs_2 {
+  position: absolute;
+  bottom: 13%;
+  color: white;
+  left: 16%;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.logo {
+  padding-top: 50px;
+}
+
+.form_ {
+  padding-top: 150px;
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+}
+
+.flex {
+  padding-top: 40px;
+}
+
+.email,
+.password {
+  top: 50%;
+  position: relative;
+  font-size: 16px;
+  color: #666666;
+  font-weight: 400;
+  padding-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  width: 570px;
+}
+
+.input_box input {
+  position: relative;
+  width: 580px;
+  height: 45px;
+  border: 1px solid #66666636;
+  border-radius: 10px;
+  padding-left: 20px;
+  font-weight: 400;
+  font-size: 16px;
+  color: black;
+}
+
+.input_box input:hover {
+  border: 3px solid #2b6777;
+  text-decoration: none;
+}
+
+.input_box input:focus {
+  border: 3px solid #2b6777;
+  outline: none;
+}
+
+.input_box {
+  margin-bottom: 30px;
+}
+
+.btn {
+  cursor: pointer;
+  background-color: #2b6777;
+  color: white;
+  border-radius: 32px;
+  width: 170px;
+  height: 45px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.remember {
+  font-size: 0.9em;
+  align-items: center;
+  color: #162938;
+  font-weight: 400;
+  margin: -15px 0 15px;
+  display: flex;
+  top: 50%;
+  position: relative;
+  font-size: 16px;
+  justify-content: space-between;
+  padding-bottom: 5px;
+  display: flex;
+  width: 570px;
+}
+
+.remember #check input {
+  width: 15px;
+  justify-content: center;
+  margin-left: 5px;
+  accent-color: #2b6777;
+  margin-right: 3px;
+  align-items: center;
+}
+
+.remember a {
+  color: #2b6777;
+  text-decoration: none;
+}
+
+.remember a:hover {
+  color: #003b4a;
+  text-decoration: underline;
+}
+
+.learn {
+  font-size: 16px;
+  font-weight: 400;
+  color: #666666;
+  margin-top: 50px;
+  width: 80%;
+}
+
+.learn a {
+  color: #2b6777;
+  text-decoration: none;
+}
+
+.learn a:hover {
+  color: #003b4a;
+  text-decoration: underline;
+}
+
+.password .hide {
+  bottom: -10%;
+  padding-right: 8px;
+  position: relative;
+  font-size: 18px;
+  text-decoration: none;
+  color: #666666;
+}
+
+.hide:hover {
+  color: #003b4a;
+}
+
+.hide_:hover {
+  color: #003b4a;
+}
+
+.error {
+  color: red;
+  font-weight: 500;
+}

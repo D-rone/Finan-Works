@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import "./Employee.css";
-import quit from "../../../assest/quitX.svg";
+import "../global/popUpStyle.css";
+import quit from "../../../assets/quitX.svg";
 
 let data = {};
 export default function AddEmployee({ toggle }) {

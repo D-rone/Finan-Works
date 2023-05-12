@@ -23,6 +23,7 @@
   height: 634px;
   filter: blur(500px);
   z-index: 2;
+  opacity: 0.8;
   pointer-events: none;
 }
 #ellipse1 {

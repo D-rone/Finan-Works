@@ -1,83 +1,127 @@
 import React from "react";
-import filterImg from "../../../assest/filter.svg";
-import downloadImg from "../../../assest/download.svg";
-import prevImg from "../../../assest/prev.svg";
-import nextImg from "../../../assest/next.svg";
-import sendMoneyImg from "../../../assest/sendMoney.svg";
-import addEmployee from "../../../assest/addEmployee.svg";
-import delEmployee from "../../../assest/deleteEmployee.svg";
-import testAvatar from "../../../assest/test.svg";
+import filterImg from "../../../assets/filter.svg";
+import downloadImg from "../../../assets/download.svg";
+import prevImg from "../../../assets/prev.svg";
+import nextImg from "../../../assets/next.svg";
+import sendMoneyImg from "../../../assets/sendMoney.svg";
+import addEmployee from "../../../assets/addEmployee.svg";
+import delEmployee from "../../../assets/deleteEmployee.svg";
+import testAvatar from "../../../assets/test.svg";
 
-import "./employeeListStyle.css";
-import EmployeeListItems from "./EmployeeListItems";
-import { useState, useEffect } from "react";
+import "../global/globalStyle.css";
 import Employee from "./Employee";
+import { useState, useEffect } from "react";
+import EmployeeData from "./EmployeeData";
 import TopBar from "../global/TopBar";
-import topG from "../../../assest/topG.PNG";
+import topG from "../../../assets/topG.PNG";
 import AddEmployeeForm from "./AddEmployeeForm";
 
-let employeesList = [
-  {
-    isChecked: false,
-    image: testAvatar,
-    name: "Mohamed Ouksili",
-    id: "EM193",
-    email: "mohamedouksili27asjdgkl@gmail.com",
-    type: "Cleaner",
-    phone: "0669291946",
-  },
-  {
-    isChecked: false,
-    image: topG,
-    name: "Koussaila Benhammouch",
-    id: "EM123",
-    email: "k.benhammouch@esi-sba.dz",
-    type: "Assistant",
-    phone: "0554656876",
-  },
-  {
-    isChecked: false,
-    image: testAvatar,
-    name: "Ibrahim Ghoual",
-    id: "EM105",
-    email: "i.ghoual@esi-sba.dz",
-    type: "Professor",
-    phone: "074984987",
-  },
-  {
-    isChecked: false,
-    image: topG,
-    name: "Tbahriti Mohamed",
-    id: "EM892",
-    email: "m.tbahriti@esi-sba.dz",
-    type: "Doctor",
-    phone: "0856487987",
-  },
-  {
-    isChecked: false,
-    image: testAvatar,
-    name: "Beddal Khaled",
-    id: "EM130",
-    email: "k.beddal@gmail.com",
-    type: "Teacher",
-    phone: "0687987456",
-  },
-  {
-    isChecked: false,
-    image: topG,
-    name: "Cerra Chraka Adel",
-    id: "EM199",
-    email: "a.cerra-chraka@gmail.com",
-    type: "Ingeneer",
-    phone: "05448978987",
-  },
-];
+let dataFetched = {
+  from: 21,
+  to: 31,
+  size: 234,
+  list: [
+    {
+      isChecked: false,
+      image: testAvatar,
+      name: "Mohamed Ouksili",
+      id: "EM193",
+      email: "mohamedouksili27asjdgkl@gmail.com",
+      type: "Cleaner",
+      phone: "0669291946",
+    },
+    {
+      isChecked: false,
+      image: topG,
+      name: "Koussaila Benhammouch",
+      id: "EM123",
+      email: "k.benhammouch@esi-sba.dz",
+      type: "Assistant",
+      phone: "0554656876",
+    },
+    {
+      isChecked: false,
+      image: testAvatar,
+      name: "Ibrahim Ghoual",
+      id: "EM105",
+      email: "i.ghoual@esi-sba.dz",
+      type: "Professor",
+      phone: "074984987",
+    },
+    {
+      isChecked: false,
+      image: topG,
+      name: "Tbahriti Mohamed",
+      id: "EM892",
+      email: "m.tbahriti@esi-sba.dz",
+      type: "Doctor",
+      phone: "0856487987",
+    },
+    {
+      isChecked: false,
+      image: testAvatar,
+      name: "Beddal Khaled",
+      id: "EM130",
+      email: "k.beddal@gmail.com",
+      type: "Teacher",
+      phone: "0687987456",
+    },
+    {
+      isChecked: false,
+      image: topG,
+      name: "Cerra Chraka Adel Mohamed Amine",
+      id: "EM199",
+      email: "a.cerra-chraka@gmail.com",
+      type: "Ingeneer",
+      phone: "05448978987",
+    },
+    {
+      isChecked: false,
+      image: topG,
+      name: "Cerra Chraka Adel Mohamed Amine",
+      id: "EM19",
+      email: "a.cerra-chraka@gmail.com",
+      type: "Ingeneer",
+      phone: "05448978987",
+    },
+    {
+      isChecked: false,
+      image: topG,
+      name: "Cerra Chraka Adel Mohamed Amine",
+      id: "EM99",
+      email: "a.cerra-chraka@gmail.com",
+      type: "Ingeneer",
+      phone: "05448978987",
+    },
+    {
+      isChecked: false,
+      image: topG,
+      name: "Cerra Chraka Adel Mohamed Amine",
+      id: "E199",
+      email: "a.cerra-chraka@gmail.com",
+      type: "Ingeneer",
+      phone: "05448978987",
+    },
+    {
+      isChecked: false,
+      image: topG,
+      name: "Cerra Chraka Adel Mohamed Amine",
+      id: "M199",
+      email: "a.cerra-chraka@gmail.com",
+      type: "Ingeneer",
+      phone: "05448978987",
+    },
+  ],
+};
+
+let employeesList = dataFetched.list;
 
 export default function EmployeeList() {
   let [users, setUsers] = useState([]);
 
   useEffect(() => {
-    if (employeesList.length <= 6) setUsers(employeesList);
+    document.head.getElementsByTagName("title")[0].innerHTML = "Employee List";
+    setUsers(employeesList);
   }, []);
 
   let checkHandle = (e) => {
@@ -112,7 +156,10 @@ export default function EmployeeList() {
     if (showProfile.show && showProfile.uid) {
       let profileData = users.filter((user) => user.id === showProfile.uid)[0];
       return (
-        <Employee data={profileData} handleProfileClick={handleProfileClick} />
+        <EmployeeData
+          data={profileData}
+          handleProfileClick={handleProfileClick}
+        />
       );
     }
   };
@@ -133,7 +180,7 @@ export default function EmployeeList() {
       <DisplayProfile />
       <DisplayAddProfileForm />
       <TopBar />
-      <div id="employeeList">
+      <div className="pageList" id="employeeList">
         <header>
           <h2>Employee list</h2>
           <div className="headerOptions">
@@ -154,43 +201,60 @@ export default function EmployeeList() {
           </div>
         </header>
         <main>
-          <table id="employeeListTable">
-            <thead>
-              <tr>
-                <th width="3.5%"></th>
-                <th width="8.3%" className="checkbox">
-                  <div className="checkContainer">
-                    <input
-                      type="checkbox"
-                      id="allCheckbox"
-                      name="all"
-                      onChange={checkHandle}
-                    />{" "}
-                    All
-                  </div>
-                </th>
-                <th width="29%">
-                  <div>Employee name</div>
-                </th>
-                <th width="13.9%">
-                  <div>Id</div>
-                </th>
-                <th width="26%">
-                  <div>Email</div>
-                </th>
-                <th width="17.3%">
-                  <div>Type</div>
-                </th>
-                <th width="2%"></th>
-              </tr>
-            </thead>
-            <EmployeeListItems
-              checkHandle={checkHandle}
-              users={users}
-              handleProfileClick={handleProfileClick}
-            />
-          </table>
+          <div id="tableHeader">
+            <table id="listTable">
+              <thead>
+                <tr>
+                  <th width="3.5%"></th>
+                  <th width="8.3%" className="checkbox">
+                    <div className="checkContainer">
+                      <input
+                        type="checkbox"
+                        id="allCheckbox"
+                        name="all"
+                        onChange={checkHandle}
+                      />{" "}
+                      All
+                    </div>
+                  </th>
+                  <th width="29%">
+                    <div>Employee name</div>
+                  </th>
+                  <th width="13.9%">
+                    <div>Id</div>
+                  </th>
+                  <th width="26%">
+                    <div>Email</div>
+                  </th>
+                  <th width="17.3%">
+                    <div>Type</div>
+                  </th>
+                  <th width="2%"></th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div id="tableBody">
+            <table id="listTable">
+              <thead>
+                <tr>
+                  <th style={{ height: "0px" }} width="4%"></th>
+                  <th style={{ height: "0px" }} width="8.3%"></th>
+                  <th style={{ height: "0px" }} width="29%"></th>
+                  <th style={{ height: "0px" }} width="14.4%"></th>
+                  <th style={{ height: "0px" }} width="26%"></th>
+                  <th style={{ height: "0px" }} width="17.3%"></th>
+                </tr>
+              </thead>
+              <Employee
+                checkHandle={checkHandle}
+                users={users}
+                handleProfileClick={handleProfileClick}
+              />
+            </table>
+          </div>
         </main>
+        <div id="tableFooterSpacer"></div>
         <footer>
           <div className="footerOptions">
             <button id="sendMoney">
@@ -205,6 +269,13 @@ export default function EmployeeList() {
               <img src={delEmployee} alt="" />
               Delete
             </button>
+          </div>
+          <div id="pageNb">
+            Showing{" "}
+            <span>
+              {dataFetched.from}-{dataFetched.to}
+            </span>{" "}
+            from <span>{dataFetched.size}</span> results
           </div>
         </footer>
       </div>

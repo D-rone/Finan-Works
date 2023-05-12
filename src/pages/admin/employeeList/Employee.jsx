@@ -1,55 +1,59 @@
-import React, { useEffect } from "react";
-import "./Employee.css";
-import quit from "../../../assest/quitX.svg";
+import React from "react";
 
-export default function Employee({ data, handleProfileClick }) {
+function EmployeeItem({ employee, checkHandle, handleProfileClick }) {
   return (
-    <div id="shade">
-      <div id="profileContainer">
-        <button onClick={handleProfileClick} id="quitBtn">
-          <img src={quit} alt=""></img>
-        </button>
+    <>
+      <tr>
+        <td></td>
+        <td>
+          <input
+            className="checkbox"
+            type="checkbox"
+            name={employee.id}
+            checked={employee.isChecked}
+            onChange={checkHandle}
+          />
+        </td>
+        <td
+          className="nameCnt"
+          onClick={handleProfileClick}
+          data-uid={employee.id}
+        >
+          <div className="nameContainer">
+            <img src={employee.image} className="userAvatar" />
+            {employee.name.length > 23
+              ? employee.name.substring(0, 22) + "..."
+              : employee.name}
+          </div>
+        </td>
+        <td className="userId">{employee.id}</td>
+        <td>
+          {employee.email.length > 25
+            ? employee.email.substring(0, 24) + "..."
+            : employee.email}
+        </td>
+        <td className="employeeType">
+          <div>{employee.type}</div>
+        </td>
+        <td></td>
+      </tr>
+    </>
+  );
+}
 
-        <h2>Employee Information</h2>
-        <table id="profileInfoTable">
-          <tbody>
-            <tr>
-              <th>Picture : </th>
-              <td>
-                <img
-                  src={data.image}
-                  id="userPic"
-                  style={{ borderRadius: "10px" }}
-                />
-              </td>
-            </tr>
-            <tr>
-              <th>Name :</th>
-              <td>
-                <div className="profileData">{data.name}</div>
-              </td>
-            </tr>
-            <tr>
-              <th>Email : </th>
-              <td>
-                <div className="profileData">{data.email}</div>
-              </td>
-            </tr>
-            <tr>
-              <th>Type : </th>
-              <td>
-                <div className="profileData">{data.type}</div>
-              </td>
-            </tr>
-            <tr>
-              <th>N° Tel :</th>
-              <td>
-                <div className="profileData">{data.phone}</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+export default function Employee({ checkHandle, users, handleProfileClick }) {
+  return (
+    <>
+      <tbody>
+        {users.map((employee) => (
+          <EmployeeItem
+            key={employee.id}
+            employee={employee}
+            checkHandle={checkHandle}
+            handleProfileClick={handleProfileClick}
+          />
+        ))}
+      </tbody>
+    </>
   );
 }
