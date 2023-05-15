@@ -50,11 +50,11 @@ let programList = [
   },
 ];
 
-export default function EmployeeList() {
+export default function ProgramList() {
   let [users, setUsers] = useState([]);
 
   useEffect(() => {
-    if (programList.length <= 3) setUsers(programList);
+    setUsers(programList);
   }, []);
 
   return (

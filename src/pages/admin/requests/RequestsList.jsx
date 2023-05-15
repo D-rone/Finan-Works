@@ -339,7 +339,7 @@ export default function RequestsList() {
               <img src={prevImg} alt="" />
             </button>
             <button id="next">
-              <img src={nextImg} alt="" />
+              <img src={nextImg} alt="" />  
             </button>
           </div>
         </header>

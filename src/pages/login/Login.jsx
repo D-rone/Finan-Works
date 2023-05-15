@@ -36,14 +36,14 @@ const Login = ({ submitForm }) => {
   return (
     <section className="login">
       <div className="login__wrapper">
-        <div className="col_1">
+        <div className="col_1 col">
           <img src={imglogin} alt="" className="login__img" />
           <p className="hhs">Lorem ipsum dolor</p>
           <p className="hhs_2">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </p>
         </div>
-        <div className="col_2">
+        <div className="col_2 col">
           <img src={Logo} alt="" className="logo" />
           <div className="form_">
             <h2>Welcome back</h2>

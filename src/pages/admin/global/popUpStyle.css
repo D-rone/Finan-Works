@@ -128,7 +128,6 @@ input::placeholder {
 }
 #filterContainer input[type="checkbox"] {
   transform: scale(3);
-  /* opacity: 0; */
 }
 
 #profileInfoTable {

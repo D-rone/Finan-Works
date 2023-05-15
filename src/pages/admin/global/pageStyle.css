@@ -261,9 +261,9 @@
     background: red;
   }
 }
-#filterContainer input[type="checkbox"] {
-  /* opacity: 0; */
-}
+/* #filterContainer input[type="checkbox"] {
+  opacity: 0;
+} */
 #appliedFilters {
   display: flex;
   gap: 10px;
