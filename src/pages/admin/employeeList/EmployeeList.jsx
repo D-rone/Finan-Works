@@ -205,7 +205,7 @@ export default function EmployeeList() {
             <table id="listTable">
               <thead>
                 <tr>
-                  <th width="3.5%"></th>
+                  <th width="4%"></th>
                   <th width="8.3%" className="checkbox">
                     <div className="checkContainer">
                       <input
@@ -213,18 +213,18 @@ export default function EmployeeList() {
                         id="allCheckbox"
                         name="all"
                         onChange={checkHandle}
-                      />{" "}
+                      />
                       All
                     </div>
                   </th>
-                  <th width="29%">
+                  <th width="30%">
                     <div>Employee name</div>
                   </th>
-                  <th width="13.9%">
+                  <th width="14.9%">
                     <div>Id</div>
                   </th>
                   <th width="26%">
-                    <div>Email</div>
+                    <div>Email&emsp;&emsp;&emsp;&emsp;</div>
                   </th>
                   <th width="17.3%">
                     <div>Type</div>

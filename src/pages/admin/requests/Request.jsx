@@ -1,9 +1,36 @@
 import React from "react";
+import rejectedLogo from "../../../assets/rejected.svg";
+import pendingLogo from "../../../assets/pending.svg";
+import acceptedUnpaid from "../../../assets/acceptedUnpaid.svg";
+import acceptedPaid from "../../../assets/acceptedPaid.svg";
 
-function RequestItem({ request, handleViewClick }) {
+let setStatusLogo = (status) => {
+  let logo;
+  switch (status) {
+    case "pending":
+      logo = pendingLogo;
+      break;
+    case "rejected":
+      logo = rejectedLogo;
+      break;
+    case "accepted - paid":
+      logo = acceptedPaid;
+      break;
+    case "accepted - unpaid":
+      logo = acceptedUnpaid;
+      break;
+
+    default:
+      break;
+  }
+  return <img src={logo} alt="" />;
+};
+
+function RequestItem({ request, handleRequestClick }) {
   return (
     <>
-      <tr>
+      <tr id="requestItem" onClick={handleRequestClick} data-id={request.id}>
+        <td></td>
         <td className="nameCnt">
           <div className="nameContainer">
             <img src={request.employeeImage} className="userAvatar" />
@@ -15,33 +42,30 @@ function RequestItem({ request, handleViewClick }) {
         <td className="employeeType">
           <div>{request.employeeType}</div>
         </td>
-        <td className="employee">
-          <div>{request.amount} DA</div>
-        </td>
-        <td>
+        <td id="alignCenterTd">
           <div>{request.date}</div>
         </td>
-        <td>
-          <div>{request.status}</div>
+        <td id="alignCenterTd">
+          <div>{request.amount} DA</div>
         </td>
-        <td>
-          <div>
-            <button onClick={handleViewClick} data-id={request.id}>
-              View
-            </button>
-          </div>
+        <td id="alignCenterTd">
+          <div>{setStatusLogo(request.status)}</div>
         </td>
       </tr>
     </>
   );
 }
 
-export default function Request({ requests, handleViewClick }) {
+export default function Request({ requests, handleRequestClick }) {
   return (
     <>
       <tbody>
         {requests.map((request) => (
-          <RequestItem key={request.id} request={request} handleViewClick={handleViewClick} />
+          <RequestItem
+            key={request.id}
+            request={request}
+            handleRequestClick={handleRequestClick}
+          />
         ))}
       </tbody>
     </>

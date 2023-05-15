@@ -91,6 +91,9 @@
   height: 90%;
   overflow-y: scroll;
 }
+#tableBody > table {
+  width: 100%;
+}
 #listTable th {
   height: 40px;
   font-style: normal;
@@ -136,6 +139,9 @@
   pointer-events: none;
 }
 
+.employeeType {
+  height: 60px;
+}
 .employeeType > div {
   font-size: 12px;
   line-height: 18px;
@@ -167,6 +173,11 @@
 
 .checkContainer {
   background: #f7fafc !important;
+  width: 70px !important;
+  gap: 20px;
+}
+#alignCenterTd > div {
+  text-align: center;
 }
 
 .pageList > footer {
@@ -237,4 +248,28 @@
 }
 #pageNb > span {
   color: black;
+}
+#requestItem:hover {
+  cursor: pointer;
+}
+#applyFilter {
+  width: 150px;
+  height: 30px;
+  border: solid black 1px;
+  &:hover {
+    cursor: pointer;
+    background: red;
+  }
+}
+#filterContainer input[type="checkbox"] {
+  /* opacity: 0; */
+}
+#appliedFilters {
+  display: flex;
+  gap: 10px;
+  height: 100%;
+  align-items: center;
+}
+#appliedFilters div {
+  height: 38px;
 }

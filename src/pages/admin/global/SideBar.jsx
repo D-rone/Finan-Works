@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./globalStyle.css";
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import finanWorksLogo from "../../../assets/Logo.svg";
@@ -10,6 +10,7 @@ import historyLogo from "../../../assets/historyLogo.svg";
 import programsLogo from "../../../assets/programsLogo.svg";
 import settingsLogo from "../../../assets/settings.svg";
 import logoutLogo from "../../../assets/logOut.svg";
+import Settings from "./Settings";
 
 let routes = [
   {
@@ -62,8 +63,19 @@ function CustomLink({ to, children, logo }) {
 }
 
 export default function SideBar() {
+  let [settingsCard, displaySettings] = useState(false);
+
+  let handleSettingsClick = (e) => {
+    displaySettings((prev) => !prev);
+  };
+
+  let DisplaySettings = () => {
+    if (settingsCard) return <Settings handleSettingsClick={handleSettingsClick} />;
+  };
+
   return (
     <>
+      <DisplaySettings />
       <div id="sidebarContainer">
         <div id="sideLogo">
           <img src={finanWorksLogo} alt="" />
@@ -81,7 +93,7 @@ export default function SideBar() {
         </nav>
         <div id="bottomSidecontainer">
           <div>
-            <button>
+            <button onClick={handleSettingsClick}>
               <img src={settingsLogo} alt="" />
               Settings
             </button>
