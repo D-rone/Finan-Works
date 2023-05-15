@@ -7,8 +7,13 @@ import Login from "./pages/login/Login.jsx";
 import "./App.css";
 import Page_404 from "./pages/Page_404.jsx";
 import RequestsList from "./pages/admin/requests/RequestsList.jsx";
-
+import Program from "./pages/admin/programs/ProgramList";
 export default function App() {
+  const [formIsSubmitted, setFormIsSubmitted] = useState(false);
+
+  const submitForm = () => {
+    setFormIsSubmitted(true);
+  };
   return (
     <BrowserRouter>
       <Routes>
@@ -28,13 +33,25 @@ export default function App() {
           <Route path="requests" element={<RequestsList />} />
           <Route path="winners" element={<Dashboard el="Winners" />} />
           <Route path="history" element={<Dashboard el="History" />} />
-          <Route path="programs" element={<Dashboard el="Programs" />} />
+          <Route path="programs" element={<Program el="Programs" />} />
           <Route
             path="announcements"
             element={<Dashboard el="Announcements" />}
           />
         </Route>
-        <Route path="login" element={<Login />} />
+        <Route
+          path="login"
+          element={
+            <div>
+              {" "}
+              {!formIsSubmitted ? (
+                <Login submitForm={submitForm} />
+              ) : (
+                <Admin />
+              )}{" "}
+            </div>
+          }
+        />
         <Route path="*" element={<Page_404 />} />
       </Routes>
     </BrowserRouter>
