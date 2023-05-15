@@ -130,7 +130,7 @@
   height: 45px;
   border-radius: 10px;
 }
-.nameContainer {
+#requestsList .nameContainer {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -272,4 +272,15 @@
 }
 #appliedFilters div {
   height: 38px;
+}
+#hiddenSubChp{
+  background: rgb(236, 234, 234) !important;
+}
+#hiddenSubChp div {
+  text-decoration: line-through;
+  text-decoration-color: red;
+}
+#subChaptersList input[type=checkbox]{
+  accent-color:gray;
+  scale: 1.5;
 }
