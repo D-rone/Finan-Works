@@ -54,7 +54,7 @@ export default function EmployeeList() {
   let [users, setUsers] = useState([]);
 
   useEffect(() => {
-    if (programList.length <= 3) setUsers(programList);
+    if (programList.length <= 3) setUsers((prev) => {});
   }, []);
 
   return (
