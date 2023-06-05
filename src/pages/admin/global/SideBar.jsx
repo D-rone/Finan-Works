@@ -11,6 +11,7 @@ import programsLogo from "../../../assets/programsLogo.svg";
 import settingsLogo from "../../../assets/settings.svg";
 import logoutLogo from "../../../assets/logOut.svg";
 import Settings from "./Settings";
+import axios from "axios";
 
 let routes = [
   {
@@ -70,9 +71,24 @@ export default function SideBar() {
   };
 
   let DisplaySettings = () => {
-    if (settingsCard) return <Settings handleSettingsClick={handleSettingsClick} />;
+    if (settingsCard)
+      return <Settings handleSettingsClick={handleSettingsClick} />;
   };
 
+  let logOut = async () => {
+    try {
+      const response = await axios.delete(
+        "http://localhost:5000/api/v1/auth/logout",
+        { withCredentials: true }
+      );
+      let data = await response.data;
+      console.log(data?.msg);
+      window.location.href = "/login";
+    } catch (error) {
+      console.log(error?.response?.data);
+      window.location.href = "/404";
+    }
+  };
   return (
     <>
       <DisplaySettings />
@@ -97,7 +113,7 @@ export default function SideBar() {
               <img src={settingsLogo} alt="" />
               Settings
             </button>
-            <button>
+            <button onClick={logOut}>
               <img src={logoutLogo} alt="" />
               Log out
             </button>

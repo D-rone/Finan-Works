@@ -360,3 +360,16 @@ button {
   gap: 0.75rem;
 } 
 
+.loadingImg0{
+  background-image: url("./assets/loading/O.svg");
+}
+
+.loadingImg1{
+  background-image: url("./assets/loading/B1.svg");
+}
+.lB1adingImg2{
+  background-image: url("./assets/loading/B2.svg");
+}
+.lB2adingImg3{
+  background-image: url("./assets/loading/B3.svg");
+}

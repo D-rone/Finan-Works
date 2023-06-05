@@ -91,7 +91,7 @@ export default function Page_404() {
 
           <ul className="navlist-item">
             <li>
-              <a href="#">Home</a>
+              <a href="/">Home</a>
             </li>
             <li>
               <a href="#about">About Us</a>
@@ -123,7 +123,7 @@ export default function Page_404() {
         <section className="content-404">
           <img className="img404-light" src={errorDark} alt="404" />
           <img className="img404-dark" src={errorLight} alt="404" />
-          <a href="#" className="GoToHomebtn">
+          <a href="/" className="GoToHomebtn">
             Go To Home
           </a>
           <a href="#" className="Contactbtn">
@@ -203,7 +203,8 @@ export default function Page_404() {
             <div className="error404page-footer-copyright">
               <p>
                 © <span className="year"></span>
-                <span className="logo-text">Finanworks</span> - All rights reserved.
+                <span className="logo-text">Finanworks</span> - All rights
+                reserved.
               </p>
               <div className="error404page-footer-item">
                 <a href="#">Privacy</a>

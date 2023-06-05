@@ -166,3 +166,6 @@
   filter: brightness(0) saturate(100%) invert(17%) sepia(38%) saturate(1969%)
     hue-rotate(205deg) brightness(103%) contrast(90%);
 }
+input[type=checkbox]:hover{
+  cursor: pointer;
+}

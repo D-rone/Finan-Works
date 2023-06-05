@@ -3,6 +3,19 @@ import "../global/popUpStyle.css";
 import quit from "../../../assets/quitX.svg";
 
 export default function SubChapData({ data, handleSubChapterClick }) {
+  console.log(data.articles);
+  let articles = data?.articles;
+  let articlesText = articles.reduce(function (prevVal, currVal, idx) {
+    let data = `${currVal.nom} : ${currVal.text}`;
+    return idx == 0 ? (
+      data
+    ) : (
+      <>
+        {prevVal} <br />
+        <br /> {data}
+      </>
+    );
+  }, "");
   return (
     <div id="shade">
       <div id="profileContainer">
@@ -13,13 +26,15 @@ export default function SubChapData({ data, handleSubChapterClick }) {
         <table id="profileInfoTable">
           <tbody>
             <tr>
-              <th>Amount </th>
+              <th>Articles </th>
               <td>
-                <div className="profileData">{data.amount}</div>
+                <div className="profileData" id="articlesData">
+                  {articlesText}
+                </div>
               </td>
             </tr>
           </tbody>
-        </table>  
+        </table>
       </div>
     </div>
   );

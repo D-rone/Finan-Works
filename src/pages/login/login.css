@@ -3,9 +3,7 @@
 }
 
 .login {
-  background-image: url("../../assets/BackgroundBlur.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-color: #f5f5f5;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -23,16 +21,8 @@
 
 .col_2 {
   border-radius: 0px 40px 40px 0px;
-  background-image: url("../../assets/BackgroundBlur.svg");
+  background-color: #f5f5f5;
   width: 60%;
-}
-
-body {
-  /*background-image: url("../../assets/BackgroundBlur.svg");*/
-  background-color: #2b677708;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
 }
 
 .hhs {
@@ -122,7 +112,7 @@ body {
 
 .input_box input:focus {
   border: 3px solid #2b6777;
-  outline: none;
+  /* outline: none; */
 }
 
 .input_box {
@@ -215,4 +205,12 @@ body {
   font-weight: 500;
   margin: 0;
   margin-top: 10px;
+}
+#btnNerr {
+  display: flex;
+  align-items: center;
+  gap: 70px;
+  color: red;
+  font-weight: 600;
+  font-size: 20px;
 }

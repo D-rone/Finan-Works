@@ -51,7 +51,7 @@
 .btn_program {
     position: relative;
     width: 85%;
-    height: 19.9vh;
+    height: 203px;
     background-color: #2b6777;
     border: none;
     border-radius: 10px;
@@ -156,8 +156,8 @@
 }
 
 .sub_ch {
-    top: 75%;
-    left: 11.2%;
+    bottom:10px;
+    left: 38px;
     position: absolute;
     width: 30vh;
     text-align: start;

@@ -124,28 +124,33 @@
 #listTable .nameCnt:hover {
   cursor: pointer;
 }
-
-.userAvatar {
-  width: 45px;
-  height: 45px;
-  border-radius: 10px;
-}
-#requestsList .nameContainer {
+.nameContainer {
   display: flex;
   align-items: center;
   gap: 10px;
   line-height: 15px;
   height: 60px;
+  font-weight: 600;
+  font-size: 17px;
   pointer-events: none;
+  width: 100%;
+  justify-content: center;
 }
 
+.announceItem .date > div {
+  text-align: center;
+}
+.emailContainer {
+  text-align: center;
+}
 .employeeType {
   height: 60px;
 }
 .employeeType > div {
   font-size: 12px;
   line-height: 18px;
-  width: 97px;
+  min-width: 97px;
+  padding: 3px 10px;
   height: 31px;
   font-weight: 600;
   background: #f2efff;
@@ -159,6 +164,7 @@
 .employeeType,
 .footerOptions > #sendMoney,
 #addEmployee,
+#addAnnounce,
 #delEmployee {
   display: flex;
   align-items: center;
@@ -229,10 +235,18 @@
   background: #2b6777;
   gap: 3px;
 }
-
+.footerOptions > #addAnnounce {
+  width: 55px;
+  height: 55px;
+  border-radius: 100%;
+  position: relative;
+  background: #2b6777;
+  bottom: 15px;
+}
 .headerOptions > #download:hover,
 .footerOptions > #sendMoney:hover,
-.footerOptions > #addEmployee:hover {
+.footerOptions > #addEmployee:hover,
+.footerOptions > #addAnnounce:hover {
   cursor: pointer;
   background: #265866;
 }
@@ -249,21 +263,29 @@
 #pageNb > span {
   color: black;
 }
-#requestItem:hover {
+.announceItem:hover,
+.requestItem:hover {
+  background-color: rgb(244, 244, 244);
   cursor: pointer;
 }
+
 #applyFilter {
-  width: 150px;
+  width: 80%;
   height: 30px;
-  border: solid black 1px;
+  background-color: #2b6777;
+  font-size: 16px;
+  font-weight: 600;
+  position: relative;
+  top: 3px;
+  color: white;
+  border: none;
+  border-radius: 5px;
   &:hover {
     cursor: pointer;
-    background: red;
+    background: #214f5c;
   }
 }
-/* #filterContainer input[type="checkbox"] {
-  opacity: 0;
-} */
+
 #appliedFilters {
   display: flex;
   gap: 10px;
@@ -273,14 +295,61 @@
 #appliedFilters div {
   height: 38px;
 }
-#hiddenSubChp{
+#hiddenSubChp {
   background: rgb(236, 234, 234) !important;
 }
 #hiddenSubChp div {
   text-decoration: line-through;
   text-decoration-color: red;
 }
-#subChaptersList input[type=checkbox]{
-  accent-color:gray;
+#subChaptersList input[type="checkbox"] {
+  accent-color: gray;
   scale: 1.5;
+}
+.subChapterName {
+  pointer-events: all;
+}
+
+.creationErr {
+  padding-left: 20px;
+  color: red;
+}
+
+#createEmplBtn {
+  border: solid black 1px;
+  border-radius: 2px;
+  &:hover {
+    cursor: pointer;
+    background: red;
+  }
+}
+
+#errorContainer {
+  color: red;
+}
+.disabledPrev,
+.disabledNext {
+  opacity: 0.3;
+  pointer-events: none;
+}
+#dataPage {
+  width: 40px;
+  border: rgb(212, 212, 212) solid 1px;
+  text-align: center;
+  height: 25px;
+  font-size: 17px;
+}
+#dataPage::-webkit-outer-spin-button,
+#dataPage::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#emptyList {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  font-weight: 500;
 }

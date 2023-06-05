@@ -3,7 +3,7 @@ import "../global/popUpStyle.css";
 import quit from "../../../assets/quitX.svg";
 
 
-let RejectedRequest = () => {
+let RejectedAnnounce = () => {
   return (
     <>
       <div className="user_description_box">
@@ -55,15 +55,16 @@ let RejectedRequest = () => {
   );
 };
 
-export default function EmployeeData({ data, handleRequestClick }) {
+export default function AnnounceData({ data, handleAnnounceClick }) {
+  console.log(data)
   return (
     <div id="shade">
       <div id="profileContainer">
-        <button onClick={handleRequestClick} id="quitBtn">
+        <button onClick={handleAnnounceClick} id="quitBtn">
           <img src={quit} alt="" />
         </button>
-        <h2>Request Information</h2>
-        <RejectedRequest />
+        <h2>Announce Information</h2>
+        <RejectedAnnounce />
       </div>
     </div>
   );

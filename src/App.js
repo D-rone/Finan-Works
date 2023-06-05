@@ -9,6 +9,8 @@ import Page_404 from "./pages/Page_404.jsx";
 import RequestsList from "./pages/admin/requests/RequestsList.jsx";
 import Program from "./pages/admin/programs/ProgramList";
 import SubChaptersList from "./pages/admin/programs/SubChapList.jsx";
+import User from "./pages/user/User.js";
+import AnnouncesList from "./pages/admin/announcement/AnnouncesList.jsx";
 export default function App() {
   const [formIsSubmitted, setFormIsSubmitted] = useState(false);
 
@@ -38,22 +40,11 @@ export default function App() {
           <Route path="sub_chapter" element={<SubChaptersList />} />
           <Route
             path="announcements"
-            element={<Dashboard el="Announcements" />}
+            element={<AnnouncesList />}
           />
         </Route>
-        <Route
-          path="login"
-          element={
-            <div>
-              {" "}
-              {!formIsSubmitted ? (
-                <Login submitForm={submitForm} />
-              ) : (
-                <Admin />
-              )}{" "}
-            </div>
-          }
-        />
+        <Route path="user" element={<User />}></Route>
+        <Route path="login" element={<Login />} />
         <Route path="*" element={<Page_404 />} />
       </Routes>
     </BrowserRouter>

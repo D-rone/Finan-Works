@@ -16,7 +16,7 @@ function SubChapterItem({ subChapter, checkHandle, handleSubChapterClick }) {
         </td>
         <td className="nameCnt">
           <div
-            className="nameContainer"
+            className="nameContainer subChapterName"
             data-subchaptername={subChapter.name}
             onClick={handleSubChapterClick}
           >

@@ -20,16 +20,14 @@ function EmployeeItem({ employee, checkHandle, handleProfileClick }) {
           data-uid={employee.id}
         >
           <div className="nameContainer">
-            <img src={employee.image} className="userAvatar" />
-            {employee.name.length > 23
-              ? employee.name.substring(0, 22) + "..."
+            {employee.name.length > 30
+              ? employee.name.substring(0, 29) + "..."
               : employee.name}
           </div>
         </td>
-        <td className="userId">{employee.id}</td>
-        <td>
-          {employee.email.length > 25
-            ? employee.email.substring(0, 24) + "..."
+        <td className="emailContainer">
+          {employee.email.length > 30
+            ? employee.email.substring(0, 29) + "..."
             : employee.email}
         </td>
         <td className="employeeType">
@@ -44,16 +42,32 @@ function EmployeeItem({ employee, checkHandle, handleProfileClick }) {
 export default function Employee({ checkHandle, users, handleProfileClick }) {
   return (
     <>
-      <tbody>
-        {users.map((employee) => (
-          <EmployeeItem
-            key={employee.id}
-            employee={employee}
-            checkHandle={checkHandle}
-            handleProfileClick={handleProfileClick}
-          />
-        ))}
-      </tbody>
+      {users.length == 0 ? (
+        <div id="emptyList">This list seems to be empty!</div>
+      ) : (
+        <table id="listTable">
+          <thead>
+            <tr>
+              <th style={{ height: "0px" }} width="4%"></th>
+              <th style={{ height: "0px" }} width="9%"></th>
+              <th style={{ height: "0px" }} width="32%"></th>
+              <th style={{ height: "0px" }} width="30%"></th>
+              <th style={{ height: "0px" }} width="23%"></th>
+              <th style={{ height: "0px" }} width="2%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((employee) => (
+              <EmployeeItem
+                key={employee.id}
+                employee={employee}
+                checkHandle={checkHandle}
+                handleProfileClick={handleProfileClick}
+              />
+            ))}
+          </tbody>
+        </table>
+      )}
     </>
   );
 }

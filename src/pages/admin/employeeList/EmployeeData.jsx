@@ -14,16 +14,6 @@ export default function EmployeeData({ data, handleProfileClick }) {
         <table id="profileInfoTable">
           <tbody>
             <tr>
-              <th>Picture : </th>
-              <td>
-                <img
-                  src={data.image}
-                  id="userPic"
-                  style={{ borderRadius: "10px" }}
-                />
-              </td>
-            </tr>
-            <tr>
               <th>Name :</th>
               <td>
                 <div className="profileData">{data.name}</div>
