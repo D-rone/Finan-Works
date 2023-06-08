@@ -59,7 +59,7 @@ export default function AnnounceData({ data, handleAnnounceClick }) {
   console.log(data)
   return (
     <div id="shade">
-      <div id="profileContainer">
+      <div id="popUpContainer">
         <button onClick={handleAnnounceClick} id="quitBtn">
           <img src={quit} alt="" />
         </button>

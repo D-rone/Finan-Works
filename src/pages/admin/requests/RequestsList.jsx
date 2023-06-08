@@ -22,7 +22,7 @@ let pageSettings = {
   page: 1,
   limit: 10,
   totalCount: Infinity,
-  count:0,
+  count: 0,
 };
 
 export default function RequestsList() {
@@ -42,37 +42,37 @@ export default function RequestsList() {
         "http://localhost:5000/api/v1/demande/admin?page=" +
           page +
           "&limit=" +
-          limit +
-          globalStatus,
+          limit,
         {
           withCredentials: true,
         }
       );
       let data = response?.data;
-      console.log(data);
-      pageSettings.count = data?.count
+      pageSettings.count = data?.count;
       pageSettings.totalCount = data?.totalCount;
-      setLoading(false);
       return data;
     } catch (error) {
       console.log("Error:", error.response);
       if (error?.response?.status == 403) {
         window.location.href = "/404";
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   let setUpRequests = (data) => {
     let results = data?.result;
-
     let requests = results.map((result) => {
       return {
         employeeName: result?.user?.name,
         id: result?._id,
-        date: new Date(result?.updatedAt),
+        createdAt: new Date(result?.createdAt),
+        updatedAt: new Date(result?.updatedAt),
         status: result?.status,
         employeeType: result?.user?.type || "employee",
-        amount: result?.montant ? result?.montant + " DA" : "",
+        amount: result?.montant,
+        files: result?.files,
         realData: result,
       };
     });
@@ -91,14 +91,30 @@ export default function RequestsList() {
     })();
   }, []);
 
-  let handleRequestClick = (e) => {
-    let element = e.target;
+  let handleRequestClick = (e, andUpdate = { update: false, to: {} }) => {
     let id = undefined;
     if (!showRequest.show) {
+      let element = e.target;
       while (element.tagName != "TR") element = element.parentNode;
       id = element.dataset.id;
     }
     setShownRequest((prevState) => {
+      if (andUpdate.update) {
+        setRequests((prev) => {
+          let i = prev.indexOf(
+            prev.filter((item) => item.id === prevState.id)[0]
+          );
+          let tmp = prev;
+
+          let updates = {
+            employeeName: tmp[i].employeeName,
+            employeeType: tmp[i].employeeType,
+            ...andUpdate.to,
+          };
+          tmp[i] = updates;
+          return tmp;
+        });
+      }
       return { show: !prevState.show, id: id };
     });
   };
@@ -244,7 +260,6 @@ export default function RequestsList() {
               case "rejected":
                 srcImage = rejectedLogo;
                 break;
-
               case "pending":
                 srcImage = pendingLogo;
                 break;
@@ -560,7 +575,8 @@ export default function RequestsList() {
           Showing{" "}
           <span>
             {1 + (pageSettings.page - 1) * pageSettings.limit} -{" "}
-            {pageSettings.page * pageSettings.limit - (pageSettings.limit-pageSettings.count)}
+            {pageSettings.page * pageSettings.limit -
+              (pageSettings.limit - pageSettings.count)}
           </span>{" "}
           from <span>{pageSettings.totalCount}</span> results
         </div>

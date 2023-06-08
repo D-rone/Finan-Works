@@ -1,42 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../global/popUpStyle.css";
 import quit from "../../../assets/quitX.svg";
+
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export default function AddAnnounceForm({ toggle, update }) {
+export default function AddSubChapForm({ toggle, update, chapterId }) {
+  let [name, setName] = useState("");
   let [description, setDescription] = useState("");
-  let [dateFin, setDateFin] = useState("");
   let [loading, setLoading] = useState(false);
-  let addNewAnnounce = async () => {
-    if (description.length > 0 && dateFin.length > 0) {
+
+  let addNewSubChapter = async () => {
+    setLoading(true);
+    if (name.length > 0 && description.length > 0) {
       try {
-        setLoading(true);
         let body = {
-          description: description,
-          deadline: dateFin,
+          nom: name,
+          text: description,
+          chapitreId: chapterId,
         };
         const response = await axios.post(
-          "http://localhost:5000/api/v1/annonce/admin/createAnnonce",
+          "http://localhost:5000/api/v1/sousChapitre/admin",
           body,
           { withCredentials: true }
         );
-        toast.success("Created new Announce successfully", {
-          autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
-        });
-        let data = response?.data?.annonce;
+        let data = response?.data?.sousChapitre;
         let newItem = {
-          description: data?.description,
           id: data?._id,
-          deadline: new Date(data?.deadline),
-          emplInscrit: [],
-          emplAdmis: [],
+          name: data?.nom,
+          articles: data?.article,
+          isHidden: data?.status != "active",
+          status: data?.status,
+          description: data?.text,
           createdAt: new Date(data?.createdAt),
-          updatedAt: new Date(data?.updatedAt),
           realData: data,
         };
         update(newItem);
+        toast.success("Sub-Chapter created successfully", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       } catch (error) {
         toast.error("" + error, {
           autoClose: 2000,
@@ -53,47 +56,42 @@ export default function AddAnnounceForm({ toggle, update }) {
     }
   };
 
-  let updateDesc = (e) => {
-    setDescription((prev) => e.target.value);
+  let updateName = (e) => {
+    setName(e.target.value);
   };
-  let updateDateFin = (e) => {
-    setDateFin((prev) => e.target.value);
+  let updateDesc = (e) => {
+    setDescription(e.target.value);
   };
   return (
     <div id="shade">
-      <div id="NewAnnContainer">
+      <div id="popUpContainer" className="newSubChapter">
         <button onClick={toggle} id="quitBtn">
           <img src={quit} alt=""></img>
         </button>
-        <div className="name_of_page"> New Announce</div>
-        <div className="chapitre_information_container_other">
-          <div className="new_chapitre_information_other">
-            <div className="new_chapitre_information_titles_other">
-              <div>Announcement name :</div>
-              <div> Date fin :</div>
-            </div>
-
-            <form
-              action=" "
-              className="new_chapitre_information_formaulaire_other"
-            >
-              <input
-                type="text"
-                placeholder=""
-                onChange={updateDesc}
-                value={description}
-              />
-              <input
-                type="date"
-                placeholder=""
-                onChange={updateDateFin}
-                value={dateFin}
-              />
-            </form>
+        <h2>Add New Sub-Chapter</h2>
+        <div className="new_chapitre_information">
+          <div className="new_chapitre_information_titles">
+            <div>Name :</div>
+            <div>Description :</div>
           </div>
+
+          <form action=" " className="new_chapitre_information_formaulaire">
+            <input
+              type="text"
+              placeholder=""
+              value={name}
+              onChange={updateName}
+            />
+            <input
+              type="text"
+              placeholder=""
+              value={description}
+              onChange={updateDesc}
+            />
+          </form>
         </div>
 
-        <button className="next_announce" onClick={addNewAnnounce}>
+        <button className="createSubChapter" onClick={addNewSubChapter}>
           Create
         </button>
         {loading ? (

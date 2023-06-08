@@ -11,6 +11,9 @@ import Program from "./pages/admin/programs/ProgramList";
 import SubChaptersList from "./pages/admin/programs/SubChapList.jsx";
 import User from "./pages/user/User.js";
 import AnnouncesList from "./pages/admin/announcement/AnnouncesList.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function App() {
   const [formIsSubmitted, setFormIsSubmitted] = useState(false);
 
@@ -38,15 +41,13 @@ export default function App() {
           <Route path="history" element={<Dashboard el="History" />} />
           <Route path="programs" element={<Program el="Programs" />} />
           <Route path="sub_chapter" element={<SubChaptersList />} />
-          <Route
-            path="announcements"
-            element={<AnnouncesList />}
-          />
+          <Route path="announcements" element={<AnnouncesList />} />
         </Route>
         <Route path="user" element={<User />}></Route>
         <Route path="login" element={<Login />} />
         <Route path="*" element={<Page_404 />} />
       </Routes>
+      <ToastContainer />
     </BrowserRouter>
   );
 }

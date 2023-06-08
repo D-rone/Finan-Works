@@ -9,7 +9,7 @@ function SubChapterItem({ subChapter, checkHandle, handleSubChapterClick }) {
           <input
             className="checkbox"
             type="checkbox"
-            name={subChapter.name}
+            name={subChapter.id}
             checked={subChapter.isHidden}
             onChange={checkHandle}
           />
@@ -27,7 +27,15 @@ function SubChapterItem({ subChapter, checkHandle, handleSubChapterClick }) {
         </td>
 
         <td>
-          <div>{subChapter.amount}</div>
+          <div>
+            {subChapter.description.length > 30
+              ? subChapter.description.substring(0, 29) + "..."
+              : subChapter.description}
+          </div>
+        </td>
+
+        <td>
+          <div>{subChapter.createdAt.toDateString()}</div>
         </td>
         <td></td>
       </tr>
@@ -45,7 +53,7 @@ export default function SubChapter({
       <tbody>
         {subChapters.map((subChapter) => (
           <SubChapterItem
-            key={subChapter.name}
+            key={subChapter.id}
             subChapter={subChapter}
             checkHandle={checkHandle}
             handleSubChapterClick={handleSubChapterClick}

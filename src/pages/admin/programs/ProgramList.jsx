@@ -9,79 +9,57 @@ import { useState, useEffect } from "react";
 import TopBar from "../global/TopBar";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
-// let programList = [
-//   {
-//     name: "chapitre 1",
-//     id: "aide social",
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,molestiae quas vel ",
-//     nb_sub_ch: "5",
-//   },
-//   {
-//     name: "chapitre 2",
-//     id: "Service de santé ",
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,molestiae quas vel ",
-//     nb_sub_ch: "4",
-//   },
-//   {
-//     name: "chapitre 3",
-//     id: "Solidarité",
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,molestiae quas vel ",
-//     nb_sub_ch: "6",
-//   },
-//   {
-//     name: "chapitre 4",
-//     id: "Le prêt social ",
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,molestiae quas vel ",
-//     nb_sub_ch: "5",
-//   },
-//   {
-//     name: "chapitre 5",
-//     id: "Les activités culturelles ",
-//     description:
-//       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,molestiae quas vel ",
-//     nb_sub_ch: "1",
-//   },
-// ];
+import AddChapterForm from "./AddChapterForm";
 
 export default function ProgramList() {
   let [programList, setProgramList] = useState([]);
   let [loading, setLoading] = useState(true);
   let getChapters = async () => {
     setLoading(true);
-    const response = await axios.get(
-      "http://localhost:5000/api/v1/chapitre/admin",
-      {
-        withCredentials: true,
-      }
-    );
-    let result = response?.data?.result;
-    console.log(response?.data?.result);
-    setProgramList(
-      result.map((item) => {
-        let path = "/admin/sub_chapter?chapter=" + encodeURI(item?._id);
-        return { ...item, path: path };
-      })
-    );
-    setLoading(false);
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/v1/chapitre/admin",
+        {
+          withCredentials: true,
+        }
+      );
+      let result = response?.data?.result;
+      setProgramList(
+        result.map((item) => {
+          let path = "/admin/sub_chapter?chapter=" + encodeURI(item?._id);
+          return { ...item, path: path };
+        })
+      );
+    } catch (error) {
+      console.log("Error:", error.response);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     getChapters();
   }, []);
 
+  let [addChapterForm, setAddChapterForm] = useState(false);
+  let toggleAddChapterForm = () => {
+    setAddChapterForm((prev) => !prev);
+  };
   return (
     <section id="mainSection">
       <TopBar />
-      <div id="employeeList">
+      {addChapterForm ? (
+        <AddChapterForm
+          toggle={toggleAddChapterForm}
+        />
+      ) : (
+        ""
+      )}
+      <div id="employeeList" className="chaptersList">
         <header>
           <h2>Programs</h2>
         </header>
-        <main className="grid lg:grid-cols-3 padding">
+        <main className="grid lg:grid-cols-3 padding listOfChapters">
           {loading ? (
             <div className="loader" id="secLoading">
               <div className="one">
@@ -206,7 +184,7 @@ export default function ProgramList() {
           ) : (
             <>
               {programList.map((card) => (
-                <div key={card.nom} className="btn_program">
+                <div key={card._id} className="btn_program">
                   <div className="card_icon">
                     <SlOptions />
                   </div>
@@ -299,7 +277,7 @@ export default function ProgramList() {
                         stroke="white"
                       />
                     </svg>
-                    <div className="sub_ch">{card?.sous_chapitre.length}</div>
+                    <div className="sub_ch">{card?.sous_chapitre?.length}</div>
                   </div>
                   <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -310,7 +288,6 @@ export default function ProgramList() {
                     <path
                       fill="#3A6D7B"
                       d="M57,-18.7C65.5,7.6,58.3,38.9,38.7,53.1C19.1,67.3,-12.8,64.4,-36.5,47.8C-60.1,31.2,-75.6,0.8,-68.1,-24.1C-60.7,-49,-30.3,-68.5,-3,-67.5C24.3,-66.5,48.5,-45.1,57,-18.7Z"
-                      transform="translate(50 50 20)"
                     />
                   </svg>
 
@@ -320,16 +297,15 @@ export default function ProgramList() {
                     <button className="card_body">
                       <div className="card_title">{card.nom} :</div>
                       <div className="card_sub">{card.text}</div>
-
                       <div className="add_icon">{card.icon}</div>
                     </button>
                   </Link>
                 </div>
               ))}
-              <button className="btn_program">
+              <button className="btn_program" onClick={toggleAddChapterForm}>
                 <div className="add_icon">
                   <RiAddCircleLine />
-                </div>{" "}
+                </div>
               </button>
             </>
           )}

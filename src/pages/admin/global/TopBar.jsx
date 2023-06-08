@@ -1,13 +1,13 @@
 import React from "react";
 import "./globalStyle.css";
-import darkModeMoon from "../../../assets/darkModeMoon.svg";
 import notifLogo from "../../../assets/notification.svg";
 import adminPic from "../../../assets/topG.PNG";
 import searchLogo from "../../../assets/search.svg";
+import { useOutletContext } from "react-router-dom";
 
-let adminUserName = "Djamel Ammar Bensaber";
 
 export default function TopBar() {
+  let [adminName] = useOutletContext();  
   return (
     <>
       <header id="topbar">
@@ -16,15 +16,12 @@ export default function TopBar() {
           <input type="text" placeholder="Search here..." />  
         </div>
         <div id="topbarOptions">
-          <button id="darkModeToggle">
-            <img src={darkModeMoon} alt="" />
-          </button>
           <button id="notificationsBtn">
             <img src={notifLogo} alt="" />
           </button>
           <div id="adminInfo">
             <img src={adminPic} alt="" />
-            <h3>{adminUserName}</h3>
+            <h3>{adminName}</h3>
           </div>
         </div>
       </header>

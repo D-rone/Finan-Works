@@ -17,7 +17,7 @@ function AnnounceItem({ announce, handleAnnounceClick }) {
           </div>
         </td>
         <td className="date">
-          <div>{announce.date.toDateString()}</div>
+          <div>{announce.createdAt.toDateString()}</div>
         </td>
         <td className="date">
           <div>{announce.deadline.toDateString()}</div>

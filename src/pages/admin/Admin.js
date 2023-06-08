@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SideBar from "./global/SideBar.jsx";
 import "./admin_style.css";
 
@@ -6,6 +6,7 @@ import { Outlet } from "react-router-dom";
 import axios from "axios";
 
 export default function Admin() {
+  let [adminName, setAdminName] = useState("");
   useEffect(() => {
     let checkLoginStatus = async () => {
       try {
@@ -18,9 +19,11 @@ export default function Admin() {
         if (user) {
           if (user.role !== "admin") {
             window.location.href = "/user";
+          } else {
+            setAdminName(user?.name);
           }
-        }else{
-          window.location.href= "/login"
+        } else {
+          window.location.href = "/login";
         }
       } catch (error) {
         console.log(error?.response?.data);
@@ -39,7 +42,7 @@ export default function Admin() {
       <section id="sideSection">
         <SideBar />
       </section>
-      <Outlet />
+      <Outlet context={[adminName]} />
     </div>
   );
 }

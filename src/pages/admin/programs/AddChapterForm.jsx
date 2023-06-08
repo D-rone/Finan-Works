@@ -1,200 +1,152 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../global/popUpStyle.css";
 import quit from "../../../assets/quitX.svg";
-import validateAccount from "./validateNewEmployee";
-import warningLogo from "../../../assets/warning.svg";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export default function AddEmployee({ toggle }) {
-  let [newUser, setNewUser] = useState({
-    email: "",
-    name: "",
-    password: "",
-    type: "",
-    phoneNumber: "",
-  });
-  let handleChange = (e) => {
-    setNewUser((prev) => {
-      return {
-        ...prev,
-        [e.target.name]: e.target.value,
-      };
-    });
-  };
-  let [validationTest, setValidationTest] = useState({
-    email: true,
-    password: true,
-    name: true,
-    phoneNb: true,
-  });
+export default function AddChapterForm({ toggle }) {
+  let [name, setName] = useState("");
+  let [description, setDescription] = useState("");
+  let [budget, setBudget] = useState(0);
   let [loading, setLoading] = useState(false);
-  let createEmployee = async () => {
-    let validation = validateAccount({
-      email: newUser.email,
-      phoneNumber: newUser.phoneNumber,
-      name: newUser.name,
-      password: newUser.password,
-    });
-    setValidationTest(validation);
-    if (
-      validation.email &&
-      validation.phoneNb &&
-      validation.name &&
-      validation.password
-    ) {
-      setLoading(true);
-      let body = {
-        email: newUser.email,
-        name: newUser.name,
-        password: "testuseronly",
-        type: newUser.type,
-        phoneNumber: newUser.phoneNumber,
-      };
+  let [remainingBudget, setRemainingBudget] = useState(0);
 
-      try {
-        const response = await axios.post(
-          "http://localhost:5000/api/v1/auth/register",
-          body,
-          { withCredentials: true }
-        );
-        let data = await response.data;
-        toast.success("User created successfully", {
+  let addNewChapter = async () => {
+    if (name.length > 0 && description.length > 0 && budget != 0) {
+      if (remainingBudget) {
+        if (budget <= remainingBudget) {
+          try {
+            setLoading(true);
+
+            let body = {
+              nom: name,
+              text: description,
+              montant: budget,
+            };
+            const response = await axios.post(
+              "http://localhost:5000/api/v1/chapitre/admin",
+              body,
+              { withCredentials: true }
+            );
+
+            toast.success("Chapter created successfully", {
+              autoClose: 2000,
+              position: toast.POSITION.BOTTOM_RIGHT,
+            });
+            setRemainingBudget((prev) => prev - budget);
+          } catch (error) {
+            toast.error("" + error, {
+              autoClose: 2000,
+              position: toast.POSITION.BOTTOM_RIGHT,
+            });
+          } finally {
+            setLoading(false);
+          }
+        } else {
+          toast.error(
+            "Can't set a budget bigger than remaining principal budget",
+            {
+              autoClose: 2000,
+              position: toast.POSITION.BOTTOM_RIGHT,
+            }
+          );
+        }
+      } else {
+        toast.error("Couldn't Load budget please refresh the page", {
           autoClose: 2000,
           position: toast.POSITION.BOTTOM_RIGHT,
         });
-      } catch (error) {
-        if (Math.floor(Number(error?.response?.status) / 100) === 4)
-        toast.error("" +error?.response?.data?.msg, {
-          autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
-        });
-        else
-          toast.error("" +error?.response, {
-            autoClose: 2000,
-            position: toast.POSITION.BOTTOM_RIGHT,
-          });
-      } finally {
-        setLoading(false);
       }
     } else {
-      console.log("phone " + validation.phoneNb);
-      console.log("email " + validation.email);
-      console.log("name " + validation.name);
-      console.log("pw " + validation.password);
+      toast.error("It seems there's a missing data", {
+        autoClose: 2000,
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
     }
   };
+
+  let updateName = (e) => {
+    setName(e.target.value);
+  };
+  let updateDesc = (e) => {
+    setDescription(e.target.value);
+  };
+  let updateBudget = (e) => {
+    setBudget(e.target.value);
+  };
+
+  let getRemainingBudget = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5000/api/v1/budget/getBudget",
+        {
+          withCredentials: true,
+        }
+      );
+      let data = response?.data;
+      let remaining = data?.budget?.filter(
+        (item) => item.description == "Budegt principale"
+      )[0]?.remaining;
+      setRemainingBudget(remaining);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getRemainingBudget();
+  }, []);
+
   return (
     <div id="shade">
       <div id="popUpContainer">
-        <button id="quitBtn" onClick={toggle}>
+        <button onClick={toggle} id="quitBtn">
           <img src={quit} alt=""></img>
         </button>
+        <h2>Add New Chapter</h2>
+        <div id="remainingBudget">Remaining Budget : {remainingBudget}</div>
 
-        <div className="name_of_page">Add New Employee</div>
-        <table id="addProileTable">
-          <tbody>
-            <tr>
-              <th>Name&nbsp;:</th>
-              <td>
-                <div className="profileData">
-                  <input
-                    type="text"
-                    placeholder="Employee Name"
-                    className="userDataInput"
-                    name="name"
-                    value={newUser.name}
-                    onChange={handleChange}
-                  />
-                  {validationTest.name ? (
-                    ""
-                  ) : (
-                    <img src={warningLogo} className="errHere" />
-                  )}
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th>Email&nbsp;: </th>
-              <td>
-                <div className="profileData">
-                  <input
-                    type="email"
-                    placeholder="Employee Email"
-                    className="userDataInput"
-                    name="email"
-                    value={newUser.email}
-                    onChange={handleChange}
-                  />
-                  {validationTest.email ? (
-                    ""
-                  ) : (
-                    <img src={warningLogo} className="errHere" />
-                  )}
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th>Type&nbsp;: </th>
-              <td>
-                <div className="profileData">
-                  <input
-                    type="text"
-                    placeholder="Employee Type"
-                    className="userDataInput"
-                    name="type"
-                    value={newUser.type}
-                    onChange={handleChange}
-                  />
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th>N° Tel&nbsp;:</th>
-              <td>
-                <div className="profileData">
-                  <input
-                    type="text"
-                    placeholder="Employee Phone Number"
-                    className="userDataInput"
-                    name="phoneNumber"
-                    value={newUser.phoneNumber}
-                    onChange={handleChange}
-                  />
-                  {validationTest.phoneNb ? (
-                    ""
-                  ) : (
-                    <img src={warningLogo} className="errHere" />
-                  )}
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <th>Password&nbsp;:</th>
-              <td>
-                <div className="profileData">
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className="userDataInput"
-                    name="password"
-                    value={newUser.password}
-                    onChange={handleChange}
-                  />
-                  {validationTest.password ? (
-                    ""
-                  ) : (
-                    <img src={warningLogo} className="errHere" />
-                  )}
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <button id="createEmplBtn" onClick={createEmployee}>
-          Add
+        <div className="new_chapitre_information">
+          <div className="new_chapitre_information_titles">
+            <div>Name of Chapter :</div>
+            <div>Description :</div>
+            <div>Budget: </div>
+          </div>
+
+          <form action=" " className="new_chapitre_information_formaulaire">
+            <input
+              type="text"
+              placeholder=""
+              className="userDataInput"
+              value={name}
+              onChange={updateName}
+            />
+            <input
+              type="text"
+              placeholder=""
+              className="userDataInput"
+              value={description}
+              onChange={updateDesc}
+            />
+            <input
+              type="number"
+              placeholder=""
+              className="userDataInput"
+              value={budget}
+              onChange={updateBudget}
+            />
+          </form>
+        </div>
+
+        <div className="buttonn">
+          <button className="accept" onClick={addNewChapter}>
+            Confirm
+          </button>
+          <button className="reject" onClick={toggle}>
+            Cancel
+          </button>
           {loading ? (
-            <div className="loader" id="addEmplLoading">
+            <div className="loader" id="secLoading">
               <div className="one">
                 <svg
                   width="162"
@@ -317,7 +269,7 @@ export default function AddEmployee({ toggle }) {
           ) : (
             ""
           )}
-        </button>
+        </div>
       </div>
     </div>
   );

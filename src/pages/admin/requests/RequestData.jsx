@@ -1,70 +1,95 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "../global/popUpStyle.css";
 import quit from "../../../assets/quitX.svg";
+import { useState } from "react";
+import PendingRequest, {
+  AcceptedRequestForm,
+  RejectRequestForm,
+} from "./status/PendingRequest";
+import AcceptedRequest, { PayRequestForm } from "./status/AcceptedRequest";
+import RejectedRequest from "./status/RejectedRequest";
+import PaidRequest from "./status/PaidRequest";
 
-
-let RejectedRequest = () => {
-  return (
-    <>
-      <div className="user_description_box">
-        <img src={quit} className="userAvatar_image" alt=""></img>
-        <div className="information_user_box">
-          {/*Employee name  */}
-          <div className="one">
-            <div> Employee name :</div>
-            <div className="second_one"> Ahmed ahmed</div>
-          </div>
-          {/*-------------  */}
-          {/* ID */}
-          <div className="two">
-            <div>ID : </div>
-            <div className="second_one "> EM9315</div>
-          </div>
-          {/*-------------  */}
-          {/*DATE  */}
-          <div className="three">
-            <div> DATE :</div>
-            <div className="second_one"> 01-01-2023</div>
-          </div>
-          {/*-------------  */}
-          {/*TYPE */}
-          <div className="four">
-            <div>TYPE : </div>
-            <div className="second_one employee"> Employee</div>
-          </div>
-          {/*-------------  */}
-          {/*Amount */}
-          <div className="five">
-            <div>Amount : </div>
-            <div className="second_one"> $5,000 </div>
-          </div>
-          {/*-------------  */}
-          {/*Description  */}
-          <div className="six">
-            <div> Description : </div>
-            <div className="second_one"> </div>
-          </div>
-          {/*-------------  */}
-        </div>
-      </div>
-
-      <input className="description_box" href="#" placeholder="Write why ?" />
-
-      <button className="confirm">Confirm</button>
-    </>
-  );
-};
-
-export default function RequestData({ data, handleRequestClick }) {
-  console.log(data)
+export default function RequestData({ data, handleRequestClick, budgets }) {
+  let SelectPopUp = ({
+    status,
+    data,
+    toggleAccept,
+    togglePay,
+    toggleReject,
+  }) => {
+    switch (status) {
+      case "pending":
+        return (
+          <PendingRequest
+            data={data}
+            toggleReject={toggleReject}
+            toggleAccept={toggleAccept}
+          />
+        );
+        break;
+      case "rejected":
+        return <RejectedRequest data={data} />;
+        break;
+      case "accepted":
+        return <AcceptedRequest data={data} togglePay={togglePay} />;
+        break;
+      case "paid":
+        return <PaidRequest data={data}/>
+    }
+  };
+  let [rejectPopUp, setRejetPopUp] = useState(false);
+  let [acceptedPopUp, setAcceptedPopUp] = useState(false);
+  let [payPopUp, setPayPopUp] = useState(false);
+  let toggleReject = () => {
+    setRejetPopUp((prev) => !prev);
+  };
+  let toggleAccept = () => {
+    setAcceptedPopUp((prev) => !prev);
+  };
+  let togglePay = () => {
+    setPayPopUp((prev) => !prev);
+  };
   return (
     <div id="shade">
-      <div id="profileContainer">
+      <div id="popUpContainer">
         <button onClick={handleRequestClick} id="quitBtn">
           <img src={quit} alt="" />
         </button>
+        {rejectPopUp ? (
+          <>
+            <RejectRequestForm
+              id={data.id}
+              toggleReject={toggleReject}
+              quitPopUp={handleRequestClick}
+            />
+          </>
+        ) : acceptedPopUp ? (
+          <>
+            <AcceptedRequestForm
+              id={data.id}
+              toggleAccept={toggleAccept}
+              quitPopUp={handleRequestClick}
+            />
+          </>
+        ) : payPopUp ? (
+          <PayRequestForm
+            amount={data.amount}
+            id={data.id}
+            togglePay={togglePay}
+            quitPopUp={handleRequestClick}
+          />
+        ) : (
+          ""
+        )}
         <h2>Request Information</h2>
-        <RejectedRequest />
+        <SelectPopUp
+          status={data?.status}
+          data={data}
+          toggleReject={toggleReject}
+          toggleAccept={toggleAccept}
+          togglePay={togglePay}
+        />
       </div>
     </div>
   );

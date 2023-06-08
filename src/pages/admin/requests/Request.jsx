@@ -1,17 +1,24 @@
 import React from "react";
+
+import rejectedLogo from "../../../assets/rejected.svg";
 import pendingLogo from "../../../assets/pending.svg";
 import acceptedUnpaid from "../../../assets/acceptedUnpaid.svg";
+import acceptedPaid from "../../../assets/acceptedPaid.svg";
 
 let setStatusLogo = (status) => {
   let logo;
   switch (status) {
+    case "rejected":
+      logo = rejectedLogo;
+      break;
     case "pending":
       logo = pendingLogo;
       break;
+    case "paid":
+      logo = acceptedPaid;
+      break;
     case "accepted":
       logo = acceptedUnpaid;
-      break;
-    default:
       break;
   }
   return <img src={logo} alt="" />;
@@ -20,26 +27,30 @@ let setStatusLogo = (status) => {
 function RequestItem({ request, handleRequestClick }) {
   return (
     <>
-      <tr className="requestItem" onClick={handleRequestClick} data-id={request.id}>
+      <tr
+        className="requestItem"
+        onClick={handleRequestClick}
+        data-id={request.id}
+      >
         <td></td>
         <td className="nameCnt">
           <div className="nameContainer">
-            {request.employeeName.length > 23
+            {request?.employeeName?.length > 23
               ? request.employeeName.substring(0, 22) + "..."
               : request.employeeName}
           </div>
         </td>
         <td className="employeeType">
-          <div>{request.employeeType}</div>
+          <div>{request?.employeeType}</div>
         </td>
         <td id="alignCenterTd">
-          <div>{request.date.toDateString()}</div>
+          <div>{request?.createdAt.toDateString()}</div>
         </td>
         <td id="alignCenterTd">
-          <div>{request.amount}</div>
+          <div>{request?.amount}&nbsp;DA</div>
         </td>
         <td id="alignCenterTd">
-          <div>{setStatusLogo(request.status)}</div>
+          <div>{setStatusLogo(request?.status)}</div>
         </td>
       </tr>
     </>

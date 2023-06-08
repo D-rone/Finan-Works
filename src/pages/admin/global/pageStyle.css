@@ -315,15 +315,6 @@
   color: red;
 }
 
-#createEmplBtn {
-  border: solid black 1px;
-  border-radius: 2px;
-  &:hover {
-    cursor: pointer;
-    background: red;
-  }
-}
-
 #errorContainer {
   color: red;
 }
@@ -352,4 +343,36 @@
   align-items: center;
   font-size: 25px;
   font-weight: 500;
+}
+
+#secLoading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+#filterContainer {
+  position: absolute;
+  top: 40px;
+  padding: 10px;
+  right: 30px;
+  border: solid 1px black;
+  border-radius: 8px;
+  background: white;
+}
+#filterContainer table{
+  position: relative;
+  left: 5px;
+}
+#filterContainer tr {
+  border: solid black 1px;
+}
+#employeeList input[type="checkbox"] {
+  transform: scale(1.5);
+}
+#filterContainer input[type="checkbox"] {
+  transform: scale(2);
+  /* accent-color: gray; */
 }

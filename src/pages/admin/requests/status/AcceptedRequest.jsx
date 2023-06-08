@@ -1,261 +1,103 @@
 import React from "react";
-import downloadImg from "../../../assets/download.svg";
-import prevImg from "../../../assets/prev.svg";
-import nextImg from "../../../assets/next.svg";
-import sendMoneyImg from "../../../assets/sendMoney.svg";
-import addEmployee from "../../../assets/addEmployee.svg";
-import delEmployee from "../../../assets/deleteEmployee.svg";
-
-import "../global/globalStyle.css";
-import Employee from "./Employee";
-import { useState, useEffect } from "react";
-import EmployeeData from "./EmployeeData";
-import TopBar from "../global/TopBar";
-import AddEmployeeForm from "./AddEmployeeForm";
+import { useState } from "react";
 import axios from "axios";
+import acceptedLogo from "../../../../assets/acceptedUnpaid.svg";
+import { toast } from "react-toastify";
 
-let pageSettings = {
-  page: 1,
-  limit: 10,
-  totalCount: Infinity,
-  count: 0,
-};
+export let PayRequestForm = ({ id, togglePay, quitPopUp, amount }) => {
+  let [loading, setLoading] = useState(false);
+  let [newAmount, setAmount] = useState(0);
+  let [doc, setDoc] = useState();
 
-export default function EmployeeList() {
-  let [users, setUsers] = useState([]);
-  let [loading, setLoading] = useState(true);
-
-  let getAllUsers = async (page, limit) => {
+  let payRequest = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        "http://localhost:5000/api/v1/users?page=" + page + "&limit=" + limit,
+
+      const formData = new FormData();
+      formData.append("upload_preset", "znv5fvds");
+      formData.append("file", doc);
+
+      let requestCloudinary = await axios.post(
+        "https://api.cloudinary.com/v1_1/dx4qbiz0y/image/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      let url = await requestCloudinary.data["secure_url"];
+
+      console.log(url);
+
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/paiment/createDemandeTrans/" + id,
+
+        { montant: newAmount, doc: url },
         {
           withCredentials: true,
         }
       );
-      let data = response?.data;
-      pageSettings.totalCount = data?.totalCount;
-      pageSettings.count = data?.count;
-      return data;
-    } catch (error) {
-      console.log("Error:", error.response);
-      if ((error.response.status = 403)) {
-        window.location.href = "/404";
+      let data = response.data;
+      let updates = {
+        id: data?._id,
+        createdAt: new Date(data?.createdAt),
+        updatedAt: new Date(data?.updatedAt),
+        files: data?.files,
+        status: "paid",
+        amount: data?.montant,
+      };
+
+      if (Math.floor(response?.status) / 100 == 2) {
+        quitPopUp({}, { update: true, to: updates });
+        toast.success("Accepted Request have been payed to employee", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       }
+    } catch (error) {
+      console.log(error);
+      toast.error("" +error, {
+        autoClose: 2000,
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
     } finally {
       setLoading(false);
     }
   };
-
-  let setData = (data) => {
-    setUsers(
-      data.map((user) => {
-        return {
-          name: user.name,
-          isChecked: false,
-          id: user._id,
-          email: user.email,
-          type: user.type,
-          phone: user.phoneNumber,
-        };
-      })
-    );
+  let updateAmount = (e) => {
+    setAmount(e.target.value);
   };
-  useEffect(() => {
-    document.head.getElementsByTagName("title")[0].innerHTML = "Employee List";
-    (async () => {
-      let data = await getAllUsers(pageSettings.page, pageSettings.limit);
-      let users = data?.users || [];
-      setData(users);
-    })();
-  }, []);
-
-  let checkHandle = (e) => {
-    let { name, checked } = e.target;
-    let tmp;
-    if (name === "all") {
-      tmp = users.map((user) => ({ ...user, isChecked: checked }));
-    } else {
-      tmp = users.map((user) =>
-        user.id === name ? { ...user, isChecked: checked } : user
-      );
-
-      document.querySelector("#allCheckbox").checked = tmp.every(
-        (user) => user.isChecked
-      )
-        ? true
-        : false;
-    }
-    setUsers(tmp);
-  };
-
-  let [showProfile, setShownProfile] = useState({ show: false, uid: null });
-
-  let handleProfileClick = (e) => {
-    let uid = e.target.dataset.uid;
-    setShownProfile((prevState) => {
-      return { show: !prevState.show, uid: uid };
-    });
-  };
-
-  let DisplayProfile = () => {
-    if (showProfile.show && showProfile.uid) {
-      let profileData = users.filter((user) => user.id === showProfile.uid)[0];
-      return (
-        <EmployeeData
-          data={profileData}
-          handleProfileClick={handleProfileClick}
-        />
-      );
-    }
-  };
-
-  let [addEmployeeForm, setAddEmployeeForm] = useState(false);
-
-  let toggleAddProfileForm = () => {
-    setAddEmployeeForm((prev) => !prev);
-  };
-
-  let DisplayAddProfileForm = () => {
-    if (addEmployeeForm)
-      return <AddEmployeeForm toggle={toggleAddProfileForm} />;
-  };
-
-  let [disableGet, setDisableGet] = useState(false);
-
-  let getNextList = async () => {
-    if (
-      pageSettings.page * pageSettings.limit <= pageSettings.totalCount &&
-      !disableGet
-    ) {
-      setDisableGet(true);
-      pageSettings.page++;
-
-      let data = await getAllUsers(pageSettings.page, pageSettings.limit);
-      let users = data?.users;
-      setData(users);
-      setDisableGet(false);
-    }
-  };
-
-  let getPrevList = async () => {
-    if (pageSettings.page > 1 && !disableGet) {
-      setDisableGet(true);
-      pageSettings.page--;
-
-      let data = await getAllUsers(pageSettings.page, pageSettings.limit);
-      let users = data?.users;
-      setData(users);
-      setDisableGet(false);
-    }
-  };
-
-  let setPage = async (e) => {
-    e.preventDefault();
-    let page = e.target.children[0]?.value;
-    if (page >= 1 && !disableGet) {
-      setDisableGet(true);
-      let lastPage = Math.ceil(pageSettings.totalCount / pageSettings.limit);
-      if (page <= lastPage) pageSettings.page = page;
-      else pageSettings.page = lastPage;
-
-      let data = await getAllUsers(pageSettings.page, pageSettings.limit);
-      let users = data?.users;
-      setData(users);
-      setDisableGet(false);
-    }
-  };
-
-  let PrevNextBtns = () => {
-    let prevBtn =
-      pageSettings.page > 1 ? (
-        <button id="prev" onClick={getPrevList}>
-          <img src={prevImg} alt="" />
-        </button>
-      ) : (
-        <button id="prev" className="disabledPrev" onClick={getPrevList}>
-          <img src={prevImg} alt="" />
-        </button>
-      );
-
-    let nextBtn =
-      pageSettings.page * pageSettings.limit < pageSettings.totalCount ? (
-        <button id="next" onClick={getNextList}>
-          <img src={nextImg} alt="" />
-        </button>
-      ) : (
-        <button id="next" className="disabledNext" onClick={getNextList}>
-          <img src={nextImg} alt="" />
-        </button>
-      );
-
-    return (
-      <>
-        {prevBtn}
-        <form id="dataPageForm" onSubmit={setPage}>
-          <input
-            type="number"
-            defaultValue={pageSettings.page}
-            id="dataPage"
-            min={1}
-          />
-        </form>
-        {nextBtn}
-      </>
-    );
+  let updateDoc = async (e) => {
+    setDoc(e.target.files[0]);
   };
 
   return (
-    <section id="mainSection">
-      <DisplayProfile />
-      <DisplayAddProfileForm />
-      <TopBar />
-      <div className="pageList" id="employeeList">
-        <header>
-          <h2>Employee list</h2>
-          <div className="headerOptions">
-            <button id="download">
-              <img src={downloadImg} alt="" />
-              Download
-            </button>
-            <PrevNextBtns />
-          </div>
-        </header>
-        <main>
-          <div id="tableHeader">
-            <table id="listTable">
-              <thead>
-                <tr>
-                  <th width="4%"></th>
-                  <th width="9%" className="checkbox">
-                    <div className="checkContainer">
-                      <input
-                        type="checkbox"
-                        id="allCheckbox"
-                        name="all"
-                        onChange={checkHandle}
-                      />
-                      All
-                    </div>
-                  </th>
-                  <th width="32%">
-                    <div>Employee name</div>
-                  </th>
-                  <th width="30%">
-                    <div>Email</div>
-                  </th>
-                  <th width="23%">
-                    <div>Type</div>
-                  </th>
-                  <th width="2%"></th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-          <div id="tableBody">
+    <>
+      <div id="shade" className="shade2">
+        <div id="payPopUp">
+          <div>
+            <h2 id="payRequestHeader">Pay Accepted Request</h2>
+            <div id="entering_info_formulaireContainer">
+              <form action=" " className="entering_info_formulaire">
+                <div>
+                  <input
+                    type="number"
+                    placeholder="Amount"
+                    value={newAmount}
+                    onChange={updateAmount}
+                  />
+                  &nbsp;DA
+                </div>
+                <input
+                  type="file"
+                  accept=".png, .jpg, .jpeg"
+                  onChange={updateDoc}
+                />
+              </form>
+            </div>
             {loading ? (
-              <div className="loader" id="secLoading">
+              <div className="loader" id="payLoading">
                 <div className="one">
                   <svg
                     width="162"
@@ -376,41 +218,83 @@ export default function EmployeeList() {
                 </div>
               </div>
             ) : (
-              <Employee
-                checkHandle={checkHandle}
-                users={users}
-                handleProfileClick={handleProfileClick}
-              />
+              ""
             )}
+            <div id="payed_btnsContainer">
+              <button className="entering_info_next" onClick={payRequest}>
+                Confirm
+              </button>
+              <button className="entering_info_cancel" onClick={togglePay}>
+                Cancel
+              </button>
+            </div>
           </div>
-        </main>
-        <div id="tableFooterSpacer"></div>
-        <footer>
-          <div className="footerOptions">
-            <button id="sendMoney">
-              <img src={sendMoneyImg} alt="" />
-              Send money
-            </button>
-            <button id="addEmployee" onClick={toggleAddProfileForm}>
-              <img src={addEmployee} alt="" />
-              Add
-            </button>
-            <button id="delEmployee">
-              <img src={delEmployee} alt="" />
-              Delete
-            </button>
-          </div>
-          <div id="pageNb">
-            Showing{" "}
-            <span>
-              {1 + (pageSettings.page - 1) * pageSettings.limit} -{" "}
-              {pageSettings.page * pageSettings.limit -
-                (pageSettings.limit - pageSettings.count)}
-            </span>{" "}
-            from <span>{pageSettings.totalCount}</span> results
-          </div>
-        </footer>
+        </div>
       </div>
-    </section>
+    </>
+  );
+};
+
+export default function AcceptedRequest({ data, togglePay }) {
+  return (
+    <>
+      <div className="user_description_box">
+        <div className="information_user_box">
+          <div className="zero">
+            <div> Employee&nbsp;Name&nbsp;:</div>
+            <div className="second_one requestEmployeeName">
+              {data?.employeeName}
+            </div>
+          </div>
+          <div className="one">
+            <div>Employee&nbsp;Type&nbsp;: </div>
+            <div className="second_one">
+              <div>{data?.employeeType}</div>
+            </div>
+          </div>
+          <div className="two">
+            <div>Amount&nbsp;: </div>
+            <div className="second_one">{data?.amount}&nbsp;DA</div>
+          </div>
+          <div className="three">
+            <div> Provided Files&nbsp;:</div>
+            <div className="second_one">
+              {data?.files?.length > 0
+                ? data?.files.reduce((prev, curr, idx) => {
+                    if (idx == 1) return `${curr}`;
+                    else return `${prev} , ${curr}`;
+                  })
+                : "No files"}
+            </div>
+          </div>
+          <div className="three">
+            <div> Request&nbsp;Date&nbsp;:</div>
+            <div className="second_one">{data?.createdAt?.toGMTString()}</div>
+          </div>
+          <div className="four">
+            <div> Status&nbsp;:</div>
+            <div className="second_one">
+              <img src={acceptedLogo} alt={data?.status} />
+            </div>
+          </div>
+          <div className="five">
+            <div> Status&nbsp;Update&nbsp;Date&nbsp;:</div>
+
+            <div className="second_one">{data?.updatedAt?.toGMTString()}</div>
+          </div>
+
+          <div className="reject_six">
+            <div>Description&nbsp;: </div>
+          </div>
+        </div>
+      </div>
+      <div className="description_box">{data.description || "None"} </div>
+
+      <div className="payRequestBtns">
+        <button className="request_form_buttonn_accept" onClick={togglePay}>
+          Pay
+        </button>
+      </div>
+    </>
   );
 }

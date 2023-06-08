@@ -1,4 +1,4 @@
-export default function validateAccount({ email, phoneNumber, name }) {
+export default function validateAccount({ email, phoneNumber, name , password }) {
   let correctEmail = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(
     email
   );
@@ -7,5 +7,6 @@ export default function validateAccount({ email, phoneNumber, name }) {
     email: correctEmail,
     phoneNb: correctPhoneNB,
     name: name.length > 3 ? true : false,
+    password:password.length >6 ? true : false
   };
 }

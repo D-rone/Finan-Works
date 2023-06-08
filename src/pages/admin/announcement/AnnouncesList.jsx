@@ -41,13 +41,14 @@ export default function AnnouncesList() {
       let data = response?.data;
       pageSettings.totalCount = 6; /////(((££££££££££££££££££££££££££££)))
       pageSettings.count = data?.count;
-      setLoading(false);
       return data;
     } catch (error) {
       console.log("Error:", error.response);
       if (error?.response?.status == 403) {
         window.location.href = "/404";
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,7 +60,6 @@ export default function AnnouncesList() {
         return {
           description: result?.description,
           id: result?._id,
-          date: new Date(result?.date),
           deadline: new Date(result?.deadline),
           emplInscrit: result.emplInscrit ? [...result.emplInscrit] : [],
           emplAdmis: result.emplAdmis ? [...result.emplAdmis] : [],
@@ -70,6 +70,13 @@ export default function AnnouncesList() {
       });
       setAnnounces(announces);
     }
+  };
+
+  let updateAnnounce = (newItem) => {
+    console.log("done")
+    setAnnounces((prev) => {
+      return [newItem, ...prev];
+    });
   };
 
   useEffect(() => {
@@ -114,7 +121,12 @@ export default function AnnouncesList() {
 
   let DisplayAddAnnounceForm = () => {
     if (addAnnounceForm)
-      return <AddAnnounceForm toggle={toggleAddAnnounceForm} />;
+      return (
+        <AddAnnounceForm
+          toggle={toggleAddAnnounceForm}
+          update={updateAnnounce}
+        />
+      );
   };
 
   let [disableGet, setDisableGet] = useState(false);

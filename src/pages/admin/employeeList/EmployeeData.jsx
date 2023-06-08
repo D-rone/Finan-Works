@@ -5,7 +5,7 @@ import quit from "../../../assets/quitX.svg";
 export default function EmployeeData({ data, handleProfileClick }) {
   return (
     <div id="shade">
-      <div id="profileContainer">
+      <div id="popUpContainer">
         <button onClick={handleProfileClick} id="quitBtn">
           <img src={quit} alt=""></img>
         </button>
