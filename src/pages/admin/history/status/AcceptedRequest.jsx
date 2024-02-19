@@ -1,450 +1,103 @@
 import React from "react";
-
-import filterImg from "../../../assets/filter.svg";
-import prevImg from "../../../assets/prev.svg";
-import nextImg from "../../../assets/next.svg";
-
-import "../global/pageStyle.css";
-import Request from "./Request";
-import { useState, useEffect } from "react";
-import RequestData from "./RequestData";
-import TopBar from "../global/TopBar";
-
-import rejectedLogo from "../../../assets/rejected.svg";
-import pendingLogo from "../../../assets/pending.svg";
-import acceptedUnpaid from "../../../assets/acceptedUnpaid.svg";
-import acceptedPaid from "../../../assets/acceptedPaid.svg";
-import allLogo from "../../../assets/allStatus.svg";
-
+import { useState } from "react";
 import axios from "axios";
+import acceptedLogo from "../../../../assets/acceptedUnpaid.svg";
+import { toast } from "react-toastify";
 
-let pageSettings = {
-  page: 1,
-  limit: 10,
-  totalCount: Infinity,
-  count: 0,
-};
+export let PayRequestForm = ({ id, togglePay, quitPopUp, amount }) => {
+  let [loading, setLoading] = useState(false);
+  let [newAmount, setAmount] = useState(0);
+  let [doc, setDoc] = useState();
 
-export default function RequestsList() {
-  let [requests, setRequests] = useState([]);
-  let [showRequest, setShownRequest] = useState({ show: false, id: null });
-
-  let [loading, setLoading] = useState(true);
-
-  let getAllRequests = async (page, limit, status) => {
+  let payRequest = async () => {
     try {
-      let globalStatus = "";
-      status.forEach((s) => {
-        globalStatus += "&status=" + s;
-      });
       setLoading(true);
-      const response = await axios.get(
-        "http://localhost:5000/api/v1/demande/admin?page=" +
-          page +
-          "&limit=" +
-          limit +
-          globalStatus,
+
+      const formData = new FormData();
+      formData.append("upload_preset", "znv5fvds");
+      formData.append("file", doc);
+
+      let requestCloudinary = await axios.post(
+        "https://api.cloudinary.com/v1_1/dx4qbiz0y/image/upload",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      let url = await requestCloudinary.data["secure_url"];
+
+      console.log(url);
+
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/paiment/createDemandeTrans/" + id,
+
+        { montant: newAmount, doc: url },
         {
           withCredentials: true,
         }
       );
-      let data = response?.data;
-      pageSettings.count = data?.count;
-      pageSettings.totalCount = data?.totalCount;
-      return data;
-    } catch (error) {
-      console.log("Error:", error.response);
-      if (error?.response?.status == 403) {
-        window.location.href = "/404";
+      let data = response.data;
+      let updates = {
+        id: data?._id,
+        createdAt: new Date(data?.createdAt),
+        updatedAt: new Date(data?.updatedAt),
+        files: data?.files,
+        status: "paid",
+        amount: data?.montant,
+      };
+
+      if (Math.floor(response?.status) / 100 == 2) {
+        quitPopUp({}, { update: true, to: updates });
+        toast.success("Accepted Request have been payed to employee", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
       }
+    } catch (error) {
+      console.log(error);
+      toast.error("" +error, {
+        autoClose: 2000,
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
     } finally {
       setLoading(false);
     }
   };
-
-  let setUpRequests = (data) => {
-    let results = data?.result;
-    let requests = results.map((result) => {
-      return {
-        employeeName: result?.user?.name,
-        id: result?._id,
-        createdAt: new Date(result?.createdAt),
-        updatedAt: new Date(result?.updatedAt),
-        status: result?.status,
-        employeeType: result?.user?.type || "employee",
-        amount: result?.montant,
-        files: result?.files,
-        realData: result,
-      };
-    });
-    setRequests(requests);
+  let updateAmount = (e) => {
+    setAmount(e.target.value);
   };
-
-  useEffect(() => {
-    document.head.getElementsByTagName("title")[0].innerHTML = "Requests";
-    (async () => {
-      let data = await getAllRequests(
-        pageSettings.page,
-        pageSettings.limit,
-        filter.options
-      );
-      setUpRequests(data);
-    })();
-  }, []);
-
-  let handleRequestClick = (e, andUpdate = { update: false, to: {} }) => {
-    let id = undefined;
-    if (!showRequest.show) {
-      let element = e.target;
-      while (element.tagName != "TR") element = element.parentNode;
-      id = element.dataset.id;
-    }
-    setShownRequest((prevState) => {
-      if (andUpdate.update) {
-        setRequests((prev) => {
-          let i = prev.indexOf(
-            prev.filter((item) => item.id === prevState.id)[0]
-          );
-          let tmp = prev;
-
-          let updates = {
-            employeeName: tmp[i].employeeName,
-            employeeType: tmp[i].employeeType,
-            ...andUpdate.to,
-          };
-          tmp[i] = updates;
-          return tmp;
-        });
-      }
-      return { show: !prevState.show, id: id };
-    });
-  };
-
-  let DisplayRequest = () => {
-    if (showRequest.show && showRequest.id) {
-      let requestData = requests.filter(
-        (request) => request.id === showRequest.id
-      )[0];
-      return (
-        <RequestData
-          data={requestData}
-          handleRequestClick={handleRequestClick}
-        />
-      );
-    }
-  };
-
-  let [filter, setFilter] = useState({
-    options: ["pending", "accepted"],
-    display: false,
-  });
-  let [tmpFilter, setTmpFilter] = useState({
-    options: ["pending", "accepted"],
-  });
-
-  let handleFilterClick = () => {
-    setFilter((prev) => {
-      return { display: !prev.display, options: prev.options };
-    });
-  };
-
-  let checkHandle = (e) => {
-    let { checked, name } = e.target;
-    let options;
-    if (name == "all") {
-      if (checked) {
-        options = ["pending", "accepted"];
-      } else options = [];
-      setTmpFilter(() => {
-        return {
-          options: options,
-        };
-      });
-    } else {
-      setTmpFilter((prev) => {
-        options = prev.options;
-        if (checked && !options.includes(name)) {
-          options.push(name);
-        } else {
-          var index = options.indexOf(name);
-          if (index > -1) {
-            options.splice(index, 1);
-          }
-        }
-        return { options: options };
-      });
-    }
-  };
-  let DisplayFilter = () => {
-    if (filter.display) {
-      return (
-        <div id="filterContainer">
-          <table>
-            <thead>
-              <tr>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <input
-                    type="checkbox"
-                    id="allCheck"
-                    name="all"
-                    checked={tmpFilter.options.length == 2}
-                    onChange={checkHandle}
-                  />
-                </td>
-                <td>
-                  <img src={allLogo} alt="" />
-                </td>
-              </tr>
-
-              <tr>
-                <td>
-                  <input
-                    type="checkbox"
-                    id="acceptedCheck"
-                    name="accepted"
-                    checked={tmpFilter.options.includes("accepted")}
-                    onChange={checkHandle}
-                  />
-                </td>
-                <td>
-                  <img src={acceptedUnpaid} alt="" />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <input
-                    type="checkbox"
-                    id="pendingCheck"
-                    name="pending"
-                    checked={tmpFilter.options.includes("pending")}
-                    onChange={checkHandle}
-                  />
-                </td>
-                <td>
-                  <img src={pendingLogo} alt="" />
-                </td>
-              </tr>
-              <tr>
-                <td></td>
-                <td>
-                  <button id="applyFilter" onClick={applyFilter}>
-                    Apply
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      );
-    }
-  };
-
-  let AppliedFilters = () => {
-    if (filter.options.length === 2) {
-      return (
-        <div>
-          <img src={allLogo} alt="" />
-        </div>
-      );
-    } else {
-      return (
-        <>
-          {filter.options.map((item) => {
-            let srcImage;
-            switch (item) {
-              case "rejected":
-                srcImage = rejectedLogo;
-                break;
-              case "pending":
-                srcImage = pendingLogo;
-                break;
-              case "paid":
-                srcImage = acceptedPaid;
-                break;
-              case "accepted":
-                srcImage = acceptedUnpaid;
-                break;
-            }
-
-            return (
-              <div key={item}>
-                <img src={srcImage} alt="item" />
-              </div>
-            );
-          })}
-        </>
-      );
-    }
-  };
-
-  let applyFilter = async () => {
-    let arrayEquals = (a, b) => {
-      return (
-        Array.isArray(a) &&
-        Array.isArray(b) &&
-        a.length === b.length &&
-        a.every((val, index) => val === b[index])
-      );
-    };
-    if (!arrayEquals(filter.options, tmpFilter.options)) {
-      if (!tmpFilter.options.length || tmpFilter.options.length == 0) {
-        setTmpFilter({ options: [...filter.options] });
-      } else {
-        setFilter({ display: true, options: [...tmpFilter.options] });
-        let data = await getAllRequests(
-          pageSettings.page,
-          pageSettings.limit,
-          tmpFilter.options
-        );
-        setUpRequests(data);
-      }
-    }
-  };
-
-  let [disableGet, setDisableGet] = useState(false);
-
-  let getNextList = async () => {
-    if (
-      pageSettings.page * pageSettings.limit <= pageSettings.totalCount &&
-      !disableGet
-    ) {
-      setDisableGet(true);
-      pageSettings.page++;
-      let data = await getAllRequests(
-        pageSettings.page,
-        pageSettings.limit,
-        filter.options
-      );
-      setUpRequests(data);
-      setDisableGet(false);
-    }
-  };
-
-  let getPrevList = async () => {
-    if (pageSettings.page > 1 && !disableGet) {
-      setDisableGet(true);
-      pageSettings.page--;
-      let data = await getAllRequests(
-        pageSettings.page,
-        pageSettings.limit,
-        filter.options
-      );
-      setUpRequests(data);
-      setDisableGet(false);
-    }
-  };
-
-  let setPage = async (e) => {
-    e.preventDefault();
-    let page = e.target.children[0]?.value;
-    if (page >= 1 && !disableGet) {
-      setDisableGet(true);
-      let lastPage = Math.ceil(pageSettings.totalCount / pageSettings.limit);
-      if (page <= lastPage) pageSettings.page = page;
-      else pageSettings.page = lastPage;
-      let data = await getAllRequests(
-        pageSettings.page,
-        pageSettings.limit,
-        filter.options
-      );
-      setUpRequests(data);
-      setDisableGet(false);
-    }
-  };
-
-  let PrevNextBtns = () => {
-    let prevBtn =
-      pageSettings.page > 1 ? (
-        <button id="prev" onClick={getPrevList}>
-          <img src={prevImg} alt="" />
-        </button>
-      ) : (
-        <button id="prev" className="disabledPrev" onClick={getPrevList}>
-          <img src={prevImg} alt="" />
-        </button>
-      );
-
-    let nextBtn =
-      pageSettings.page * pageSettings.limit < pageSettings.totalCount ? (
-        <button id="next" onClick={getNextList}>
-          <img src={nextImg} alt="" />
-        </button>
-      ) : (
-        <button id="next" className="disabledNext" onClick={getNextList}>
-          <img src={nextImg} alt="" />
-        </button>
-      );
-
-    return (
-      <>
-        {prevBtn}
-        <form id="dataPageForm" onSubmit={setPage}>
-          <input
-            type="number"
-            defaultValue={pageSettings.page}
-            id="dataPage"
-            min={1}
-          />
-        </form>
-        {nextBtn}
-      </>
-    );
+  let updateDoc = async (e) => {
+    setDoc(e.target.files[0]);
   };
 
   return (
-    <section id="mainSection">
-      <DisplayRequest />
-      <TopBar />
-      <div className="pageList" id="requestsList">
-        <header>
-          <h2>Requests</h2>
-          <div id="appliedFilters">
-            <AppliedFilters />
-          </div>
-          <div className="headerOptions">
-            <button id="filter" onClick={handleFilterClick}>
-              <img src={filterImg} alt="" />
-              Filter
-            </button>
-            <DisplayFilter />
-            <PrevNextBtns />
-          </div>
-        </header>
-        <main>
-          <div id="tableHeader">
-            <table id="listTable">
-              <thead>
-                <tr>
-                  <th width="2%"></th>
-                  <th width="23.7%">
-                    <div>Employee name</div>
-                  </th>
-                  <th width="13.8%">
-                    <div>Type</div>
-                  </th>
-                  <th width="21%">
-                    <div>Date</div>
-                  </th>
-                  <th width="13.8%">
-                    <div>Amount</div>
-                  </th>
-                  <th width="24.7%">
-                    <div>Status</div>
-                  </th>
-                  <th width="13px"></th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-          <div id="tableBody">
+    <>
+      <div id="shade" className="shade2">
+        <div id="payPopUp">
+          <div>
+            <h2 id="payRequestHeader">Pay Accepted Request</h2>
+            <div id="entering_info_formulaireContainer">
+              <form action=" " className="entering_info_formulaire">
+                <div>
+                  <input
+                    type="number"
+                    placeholder="Amount"
+                    value={newAmount}
+                    onChange={updateAmount}
+                  />
+                  &nbsp;DA
+                </div>
+                <input
+                  type="file"
+                  accept=".png, .jpg, .jpeg"
+                  onChange={updateDoc}
+                />
+              </form>
+            </div>
             {loading ? (
-              <div className="loader" id="secLoading">
+              <div className="loader" id="payLoading">
                 <div className="one">
                   <svg
                     width="162"
@@ -565,23 +218,83 @@ export default function RequestsList() {
                 </div>
               </div>
             ) : (
-              <Request
-                requests={requests}
-                handleRequestClick={handleRequestClick}
-              />
+              ""
             )}
+            <div id="payed_btnsContainer">
+              <button className="entering_info_next" onClick={payRequest}>
+                Confirm
+              </button>
+              <button className="entering_info_cancel" onClick={togglePay}>
+                Cancel
+              </button>
+            </div>
           </div>
-        </main>
-        <div id="pageNb">
-          Showing{" "}
-          <span>
-            {1 + (pageSettings.page - 1) * pageSettings.limit} -{" "}
-            {pageSettings.page * pageSettings.limit -
-              (pageSettings.limit - pageSettings.count)}
-          </span>{" "}
-          from <span>{pageSettings.totalCount}</span> results
         </div>
       </div>
-    </section>
+    </>
+  );
+};
+
+export default function AcceptedRequest({ data, togglePay }) {
+  return (
+    <>
+      <div className="user_description_box">
+        <div className="information_user_box">
+          <div className="zero">
+            <div> Employee&nbsp;Name&nbsp;:</div>
+            <div className="second_one requestEmployeeName">
+              {data?.employeeName}
+            </div>
+          </div>
+          <div className="one">
+            <div>Employee&nbsp;Type&nbsp;: </div>
+            <div className="second_one">
+              <div>{data?.employeeType}</div>
+            </div>
+          </div>
+          <div className="two">
+            <div>Amount&nbsp;: </div>
+            <div className="second_one">{data?.amount}&nbsp;DA</div>
+          </div>
+          <div className="three">
+            <div> Provided Files&nbsp;:</div>
+            <div className="second_one">
+              {data?.files?.length > 0
+                ? data?.files.reduce((prev, curr, idx) => {
+                    if (idx == 1) return `${curr}`;
+                    else return `${prev} , ${curr}`;
+                  })
+                : "No files"}
+            </div>
+          </div>
+          <div className="three">
+            <div> Request&nbsp;Date&nbsp;:</div>
+            <div className="second_one">{data?.createdAt?.toGMTString()}</div>
+          </div>
+          <div className="four">
+            <div> Status&nbsp;:</div>
+            <div className="second_one">
+              <img src={acceptedLogo} alt={data?.status} />
+            </div>
+          </div>
+          <div className="five">
+            <div> Status&nbsp;Update&nbsp;Date&nbsp;:</div>
+
+            <div className="second_one">{data?.updatedAt?.toGMTString()}</div>
+          </div>
+
+          <div className="reject_six">
+            <div>Description&nbsp;: </div>
+          </div>
+        </div>
+      </div>
+      <div className="description_box">{data.description || "None"} </div>
+
+      <div className="payRequestBtns">
+        <button className="request_form_buttonn_accept" onClick={togglePay}>
+          Pay
+        </button>
+      </div>
+    </>
   );
 }

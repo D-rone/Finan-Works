@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./globalStyle.css";
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import finanWorksLogo from "../../../assets/Logo.svg";
 import dashboardLogo from "../../../assets/dashboardLogo.svg";

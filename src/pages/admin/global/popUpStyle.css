@@ -97,8 +97,11 @@
 #profileInfoTable {
   position: relative;
 }
-
-#addProileTable input {
+#drawCount {
+  width: 80px !important;
+}
+#addProileTable input,
+#drawCount {
   margin: 10px 20px;
   font-size: 22px;
   width: 350px;
@@ -252,7 +255,8 @@
   width: 200px;
 }
 
-.request_form_buttonn_accept {
+
+.request_form_buttonn_accept , #drawBtn {
   font-family: Poppins;
   font-size: 25px;
   border-radius: 5px;
@@ -266,6 +270,13 @@
   &:hover {
     background: #18aa2d;
   }
+}
+
+#drawBtn{
+  height: 60px !important;
+  width: 200px;
+  position: absolute;
+  bottom: 5 0px;
 }
 
 .request_form_buttonn_reject {
@@ -747,7 +758,6 @@ REJECTED PAGE
 .new_chapitre_information_titles_other {
   display: flex;
   flex-flow: column wrap;
-
   width: 262px;
 }
 
@@ -807,4 +817,132 @@ REJECTED PAGE
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.new_chapitre_information_formaulaire_other_announce {
+  display: flex;
+  flex-flow: column wrap;
+  width: 70%;
+  margin-left: 30px;
+}
+
+.new_chapitre_information_formaulaire_other_announce div {
+  background: #dfdede99;
+  border-radius: 5px;
+  margin: 10px 5px;
+  height: 40px;
+  border: none;
+  font-family: poppins;
+  padding: 5px 20px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+}
+
+.chapitre_information_container_other_announce {
+  display: flex;
+  flex-flow: column wrap;
+  position: absolute;
+  left: 2%;
+  top: 18%;
+
+  width: 80%;
+}
+
+.new_chapitre_information_other_announce {
+  display: flex;
+  direction: row;
+
+  width: 100%;
+}
+
+.new_chapitre_information_titles_other_announce {
+  display: flex;
+  flex-flow: column wrap;
+  width: 100%;
+  gap: 0;
+  align-items: center;
+}
+
+.new_chapitre_information_titles_other_announce div {
+  margin: 15px 5px;
+  height: 40px;
+  font-size: 22px;
+
+  width: 100%;
+  text-align: end;
+}
+.container_lists {
+  position: absolute;
+  right: 5%;
+  bottom: 10%;
+  height: 40%;
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+}
+
+.Employees_inscrits {
+  height: 100%;
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  margin-right: 5%;
+}
+
+.Employees_admis {
+  height: 100%;
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 5%;
+}
+
+.Employees_inscrits_title {
+  width: 100%;
+  height: 12%;
+
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.Employees_inscrits_data {
+  width: 70%;
+  height: 80%;
+
+  overflow: auto;
+}
+
+.Employees_admis_title {
+  width: 100%;
+  height: 12%;
+
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.Employees_admis_data {
+  width: 70%;
+  height: 80%;
+
+  overflow: auto;
+}
+
+.Employees_inscrits_data div {
+  width: 90%;
+  height: 30px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: rgba(223, 222, 222, 0.3);
+  padding: 10px;
+}
+
+.Employees_admis_data div {
+  width: 90%;
+  height: 30px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: rgba(223, 222, 222, 0.3);
+  padding: 10px;
 }

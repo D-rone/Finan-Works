@@ -13,6 +13,8 @@ import User from "./pages/user/User.js";
 import AnnouncesList from "./pages/admin/announcement/AnnouncesList.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Home from "./pages/home/Home.jsx";
+import HistoryList from "./pages/admin/history/HistoryList.jsx";
 
 export default function App() {
   const [formIsSubmitted, setFormIsSubmitted] = useState(false);
@@ -23,22 +25,12 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              Finan-works
-              <Link to="admin">Admin Page</Link>
-              <Link to="login">Login Page</Link>
-            </div>
-          }
-        />
+        <Route path="/" element={<Home />} />
         <Route path="admin" element={<Admin />}>
           <Route path="" element={<Dashboard el="Dashboard" />} />
           <Route path="employee_list" element={<EmployeeList />} />
           <Route path="requests" element={<RequestsList />} />
-          <Route path="winners" element={<Dashboard el="Winners" />} />
-          <Route path="history" element={<Dashboard el="History" />} />
+          <Route path="history" element={<HistoryList />} />
           <Route path="programs" element={<Program el="Programs" />} />
           <Route path="sub_chapter" element={<SubChaptersList />} />
           <Route path="announcements" element={<AnnouncesList />} />

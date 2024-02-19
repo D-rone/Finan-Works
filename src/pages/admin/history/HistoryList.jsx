@@ -5,9 +5,9 @@ import prevImg from "../../../assets/prev.svg";
 import nextImg from "../../../assets/next.svg";
 
 import "../global/pageStyle.css";
-import Request from "./Request";
+import History from "./History";
 import { useState, useEffect } from "react";
-import RequestData from "./RequestData";
+import HistoryData from "./HistoryData";
 import TopBar from "../global/TopBar";
 
 import rejectedLogo from "../../../assets/rejected.svg";
@@ -25,7 +25,7 @@ let pageSettings = {
   count: 0,
 };
 
-export default function RequestsList() {
+export default function HistoryList() {
   let [requests, setRequests] = useState([]);
   let [showRequest, setShownRequest] = useState({ show: false, id: null });
 
@@ -126,7 +126,7 @@ export default function RequestsList() {
         (request) => request.id === showRequest.id
       )[0];
       return (
-        <RequestData
+        <HistoryData
           data={requestData}
           handleRequestClick={handleRequestClick}
         />
@@ -135,11 +135,11 @@ export default function RequestsList() {
   };
 
   let [filter, setFilter] = useState({
-    options: ["pending", "accepted"],
+    options: ["paid", "rejected"],
     display: false,
   });
   let [tmpFilter, setTmpFilter] = useState({
-    options: ["pending", "accepted"],
+    options: ["paid", "rejected"],
   });
 
   let handleFilterClick = () => {
@@ -153,7 +153,7 @@ export default function RequestsList() {
     let options;
     if (name == "all") {
       if (checked) {
-        options = ["pending", "accepted"];
+        options = ["paid", "rejected"];
       } else options = [];
       setTmpFilter(() => {
         return {
@@ -206,28 +206,28 @@ export default function RequestsList() {
                 <td>
                   <input
                     type="checkbox"
-                    id="acceptedCheck"
-                    name="accepted"
-                    checked={tmpFilter.options.includes("accepted")}
+                    id="paidCheck"
+                    name="paid"
+                    checked={tmpFilter.options.includes("paid")}
                     onChange={checkHandle}
                   />
                 </td>
                 <td>
-                  <img src={acceptedUnpaid} alt="" />
+                  <img src={acceptedPaid} alt="" />
                 </td>
               </tr>
               <tr>
                 <td>
                   <input
                     type="checkbox"
-                    id="pendingCheck"
-                    name="pending"
-                    checked={tmpFilter.options.includes("pending")}
+                    id="rejectedCheck"
+                    name="rejected"
+                    checked={tmpFilter.options.includes("rejected")}
                     onChange={checkHandle}
                   />
                 </td>
                 <td>
-                  <img src={pendingLogo} alt="" />
+                  <img src={rejectedLogo} alt="" />
                 </td>
               </tr>
               <tr>
@@ -403,7 +403,7 @@ export default function RequestsList() {
       <TopBar />
       <div className="pageList" id="requestsList">
         <header>
-          <h2>Requests</h2>
+          <h2>History</h2>
           <div id="appliedFilters">
             <AppliedFilters />
           </div>
@@ -565,7 +565,7 @@ export default function RequestsList() {
                 </div>
               </div>
             ) : (
-              <Request
+              <History
                 requests={requests}
                 handleRequestClick={handleRequestClick}
               />

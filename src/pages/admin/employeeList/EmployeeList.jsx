@@ -397,7 +397,7 @@ export default function EmployeeList() {
             </button>
             <button id="delEmployee">
               <img src={delEmployee} alt="" />
-              Delete
+              Disable
             </button>
           </div>
           <div id="pageNb">

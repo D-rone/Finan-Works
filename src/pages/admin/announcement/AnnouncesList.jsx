@@ -39,7 +39,7 @@ export default function AnnouncesList() {
         }
       );
       let data = response?.data;
-      pageSettings.totalCount = 6; /////(((££££££££££££££££££££££££££££)))
+      pageSettings.totalCount = data?.totalCount; 
       pageSettings.count = data?.count;
       return data;
     } catch (error) {
@@ -55,7 +55,6 @@ export default function AnnouncesList() {
   let setUpAnnounces = (data) => {
     let results = data?.result;
     if (results) {
-      console.log(results);
       let announces = results.map((result) => {
         return {
           description: result?.description,

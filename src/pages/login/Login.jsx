@@ -7,6 +7,7 @@ import "./login.css";
 import validation from "./validation";
 import UsePasswordToggle from "./UsePasswordToggle";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
   useEffect(() => {
@@ -18,7 +19,7 @@ const Login = () => {
         );
         let data = await response.data;
         let user = data.user;
-          console.log(user)
+        console.log(user);
         if (user) {
           if (user.role === "admin") {
             window.location.href = "/admin";
@@ -72,9 +73,13 @@ const Login = () => {
             }
           }
         } catch (error) {
-          if (Math.floor(Number(error?.response?.status) / 100) === 4)
+          if (Math.floor(Number(error?.response?.status) / 100) === 4) {
             setServerErr(error.response.data);
-          else {
+            toast.error("" + error.response.data?.msg, {
+              autoClose: 2000,
+              position: toast.POSITION.BOTTOM_RIGHT,
+            });
+          } else {
             console.log(error);
           }
         } finally {
@@ -99,9 +104,9 @@ const Login = () => {
       <div className="login__wrapper">
         <div className="col_1 col">
           <img src={imglogin} alt="" className="login__img" />
-          <p className="hhs">Lorem ipsum dolor</p>
+          <p className="hhs">Welcome</p>
           <p className="hhs_2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Hammoud bou3lam innova w l3lam
           </p>
         </div>
         <div className="col_2 col">
